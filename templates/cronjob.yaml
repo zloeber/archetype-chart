@@ -16,7 +16,7 @@ metadata:
     {{ toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{ include "common.labels" $root | nindent 4 }}
+    {{ include "archetype.labels" $root | nindent 4 }}
   {{- with $cron.labels }}
     {{ toYaml . | nindent 4 }}
   {{- end }}
@@ -41,7 +41,7 @@ spec:
             {{ toYaml . | nindent 12 }}
           {{- end }}
           labels:
-            {{ include "common.labels" $root | nindent 12 }}
+            {{ include "archetype.labels" $root | nindent 12 }}
         spec:
           restartPolicy: "{{ default "Never" $cron.restartPolicy }}"
           serviceAccountName: "{{ default "default" $cron.serviceAccountName }}"

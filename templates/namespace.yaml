@@ -4,9 +4,9 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ if $config.name }}{{ $config.name }}{{ else }}{{ include "common.fullname" $root }}{{ end }}
+  name: {{ if $config.name }}{{ $config.name }}{{ else }}{{ include "archetype.fullname" $root }}{{ end }}
   labels:
-    {{- include "common.labels" $root | nindent 4 }}
+    {{- include "archetype.labels" $root | nindent 4 }}
 {{- with $config.labels }}
     {{ toYaml . | nindent 4 }}
 {{- end }}

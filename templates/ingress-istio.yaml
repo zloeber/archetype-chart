@@ -11,7 +11,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
-  name: {{ include "common.shortname" $root }}-gateway
+  name: {{ include "archetype.shortname" $root }}-gateway
 spec:
   selector:
     istio: ingressgateway
@@ -27,11 +27,11 @@ spec:
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: {{ include "common.shortname" $root }}-virtualservice
+  name: {{ include "archetype.shortname" $root }}-virtualservice
 spec:
   gateways:
 {{- if not ($config.istio.gateway) }}
-  - {{ include "common.shortname" $root }}-gateway
+  - {{ include "archetype.shortname" $root }}-gateway
 {{- else }}
 {{- with $config.istio.gateway }}
     {{ toYaml . | nindent 4 }}
@@ -42,7 +42,7 @@ spec:
     {{ toYaml . | nindent 4 }}
 {{- end }}
   http:
-  - name: name: {{ include "common.shortname" $root }}-routes
+  - name: name: {{ include "archetype.shortname" $root }}-routes
     match:
     - uri:
         prefix: /

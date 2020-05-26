@@ -10,12 +10,12 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ include "common.shortname" . }}-custom-rules
+  name: {{ include "archetype.shortname" . }}-custom-rules
   namespace: {{ .Values.prometheus.namespace | default "monitoring" | quote }}
   labels:
     role: alert-rules
     prometheus: {{ .Values.prometheus.instance | default "kube-prometheus" | quote }}
-    {{- include "common.labels" $root | nindent 4 }}
+    {{- include "archetype.labels" $root | nindent 4 }}
 spec:
   groups:
   {{- range $name, $ruleset := .Values.prometheus.customRules.rules }}
@@ -29,7 +29,7 @@ spec:
       {{- with $alert.labels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
-        {{- include "common.labels" $root | nindent 8 }}
+        {{- include "archetype.labels" $root | nindent 8 }}
       {{- with $alert.annotations }}
       annotations:
         {{- toYaml . | nindent 8 }}

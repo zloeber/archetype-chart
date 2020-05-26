@@ -6,7 +6,7 @@ kind: Secret
 metadata:
   name: {{ include "archetype.fullname" . }}-dockercfg
   labels:
-    {{- include "common.labels" $root | nindent 4 }}
+    {{- include "archetype.labels" $root | nindent 4 }}
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ template "archetype.imagePullSecret" $root }}

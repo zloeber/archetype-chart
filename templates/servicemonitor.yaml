@@ -10,9 +10,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.fullname" $root }}-metrics
+  name: {{ include "archetype.fullname" $root }}-metrics
   labels:
-    {{- include "common.labels" $root | nindent 4 }}
+    {{- include "archetype.labels" $root | nindent 4 }}
 spec:
   type: ClusterIP
   ports:
@@ -21,20 +21,20 @@ spec:
     port: {{ .Values.prometheus.serviceMonitor.targetPort | default .Values.ports.prometheus }}
     targetPort: metrics
   selector:
-    {{- include "common.service.selectors" $root | nindent 4 }}
+    {{- include "archetype.service.selectors" $root | nindent 4 }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "common.fullname" $root }}
+  name: {{ include "archetype.fullname" $root }}
 {{- if .Values.prometheus.namespace }}
   namespace: {{ .Values.prometheus.namespace }}
 {{- else }}
   namespace: {{ .Release.Namespace | quote }}
 {{- end }}
   labels:
-    app: {{ include "common.fullname" $root }}
-    app.kubernetes.io/name: {{ template "common.fullname" $root }}
+    app: {{ include "archetype.fullname" $root }}
+    app.kubernetes.io/name: {{ template "archetype.fullname" $root }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ template "common.chart" $root }}
@@ -43,10 +43,10 @@ metadata:
 {{ toYaml .Values.prometheus.serviceMonitor.labels | indent 4}}
 {{- end }}
 spec:
-  jobLabel: {{ template "common.fullname" $root }}
+  jobLabel: {{ template "archetype.fullname" $root }}
   selector:
     matchLabels:
-      {{- include "common.service.selectors" $root | nindent 6 }}
+      {{- include "archetype.service.selectors" $root | nindent 6 }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}

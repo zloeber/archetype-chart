@@ -3,14 +3,14 @@
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
-  name: {{ include "common.fullname" . }}
+  name: {{ include "archetype.fullname" . }}
 {{- with .Values.daemonset.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
   labels:
-{{ include "common.labels.standard" . | indent 4 }}
-{{ include "common.labels" . | indent 4 }}
+{{ include "archetype.labels.standard" . | indent 4 }}
+{{ include "archetype.labels" . | indent 4 }}
 {{- with .Values.daemonset.labels }}
 {{ toYaml .| indent 4 }}
 {{- end }}
@@ -26,7 +26,7 @@ spec:
   revisionHistoryLimit: {{ .Values.daemonset.revisionHistoryLimit }}
   template:
     metadata:
-      name: {{ include "common.fullname" . }}
+      name: {{ include "archetype.fullname" . }}
 {{- with .Values.daemonset.pod.annotations }}
       annotations:
 {{ toYaml . | indent 8 }}
@@ -43,7 +43,7 @@ spec:
       - name: {{ include "common.name" . }}
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-{{ include "common.env" . | indent 8 }}
+{{ include "archetype.common.env" . | indent 8 }}
         {{- if .Values.daemonset.pod.command }}
         command: {{ toYaml .Values.daemonset.pod.command }}
         {{- end }}
@@ -61,7 +61,7 @@ spec:
         volumeMounts:
         - mountPath: {{ .Values.persistence.mountPath | quote }}
           name: storage
-{{ include "common.files.volumeMounts" . | indent 8 }}
+{{ include "archetype.files.volumeMounts" . | indent 8 }}
 {{- with .Values.probes }}
 {{ toYaml . | indent 8 }}
 {{- end }}
@@ -82,10 +82,10 @@ spec:
       - name: storage
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ .Values.persistence.existingClaim | default (include "common.fullname" .) }}
+          claimName: {{ .Values.persistence.existingClaim | default (include "archetype.fullname" .) }}
       {{- else }}
         emptyDir: {}
       {{- end }}
-{{ include "common.files.volumes" . | indent 6 }}
+{{ include "archetype.files.volumes" . | indent 6 }}
 {{- end -}}
 {{- end -}}

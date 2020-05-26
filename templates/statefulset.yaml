@@ -3,14 +3,14 @@
 kind: StatefulSet
 apiVersion: apps/v1beta1
 metadata:
-  name: {{ include "common.fullname" . }}
+  name: {{ include "archetype.fullname" . }}
 {{- with .Values.statefulset.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
   labels:
-{{ include "common.labels.standard" . | indent 4 }}
-{{ include "common.labels" . | indent 4 }}
+{{ include "archetype.labels.standard" . | indent 4 }}
+{{ include "archetype.labels" . | indent 4 }}
 {{- with .Values.statefulset.labels }}
 {{ toYaml . | indent 4 }}
 {{- end }}
@@ -19,7 +19,7 @@ spec:
     matchLabels:
       app: {{ include "common.name" . }}
       release: {{ .Release.Name }}
-  serviceName: {{ include "common.fullname" . }}
+  serviceName: {{ include "archetype.fullname" . }}
   replicas: {{ .Values.replicaCount }}
 {{- with .Values.statefulset.strategy }}
   updateStrategy:
@@ -28,7 +28,7 @@ spec:
   revisionHistoryLimit: {{ .Values.statefulset.revisionHistoryLimit }}
   template:
     metadata:
-      name: {{ include "common.fullname" . }}
+      name: {{ include "archetype.fullname" . }}
 {{- with .Values.statefulset.pod.annotations }}
       annotations:
 {{ toYaml . | indent 8 }}
@@ -46,7 +46,7 @@ spec:
       - name: {{ include "common.name" . }}
         image: {{ required "image.repository is required!" .Values.image.repository }}:{{ required "image.tag is required!" .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-{{ include "common.env" . | indent 8 }}
+{{ include "archetype.common.env" . | indent 8 }}
 {{- with .Values.statefulset.pod.command }}
         command:
 {{ toYaml . | indent 10 }}
@@ -67,8 +67,8 @@ spec:
 {{- end }}
         volumeMounts:
         - mountPath: {{ .Values.statefulset.persistence.mountPath | quote }}
-          name: {{ include "common.fullname" . }}
-{{ include "common.files.volumeMounts" . | indent 8 }}
+          name: {{ include "archetype.fullname" . }}
+{{ include "archetype.files.volumeMounts" . | indent 8 }}
 {{- with .Values.probes }}
 {{ toYaml . | indent 8 }}
 {{- end }}
@@ -86,22 +86,22 @@ spec:
       {{- end }}
 {{- end }}
       volumes:
-{{ include "common.files.volumes" . | indent 6 }}
+{{ include "archetype.files.volumes" . | indent 6 }}
 {{- if not .Values.statefulset.persistence.useVolumeClaimTemplates }}
-      - name: {{ (include "common.fullname" . ) }}
+      - name: {{ (include "archetype.fullname" . ) }}
         persistentVolumeClaim:
-          claimName: {{ .Values.statefulset.persistence.existingClaim | default (include "common.fullname" . ) }}
+          claimName: {{ .Values.statefulset.persistence.existingClaim | default (include "archetype.fullname" . ) }}
 {{- end }}
 {{- if .Values.statefulset.persistence.useVolumeClaimTemplates }}
   volumeClaimTemplates:
   - metadata:
-      name: {{ include "common.fullname" . }}
+      name: {{ include "archetype.fullname" . }}
 {{- with .Values.statefulset.persistence.annotations }}
       annotations:
 {{ toYaml . | indent 8 }}
 {{- end }}
       labels:
-{{ include "common.labels.standard" . | indent 8 }}
+{{ include "archetype.labels.standard" . | indent 8 }}
 {{- with .Values.statefulset.persistence.labels }}
 {{ toYaml . | indent 8 }}
 {{- end }}

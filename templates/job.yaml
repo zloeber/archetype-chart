@@ -5,14 +5,14 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "common.fullname" $root }}-{{ $name | replace "_" "-"  }}
+  name: {{ include "archetype.fullname" $root }}-{{ $name | replace "_" "-"  }}
 {{- with $job.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
   labels:
-{{ include "common.labels.standard" $root | indent 4 }}
-{{ include "common.labels" . | indent 4 }}
+{{ include "archetype.labels.standard" $root | indent 4 }}
+{{ include "archetype.labels" . | indent 4 }}
 {{- with $job.labels }}
 {{ toYaml . | indent 4 }}
 {{- end }}
@@ -20,7 +20,7 @@ spec:
   activeDeadlineSeconds: {{ default 300 $job.activeDeadlineSeconds }}
   template:
     metadata:
-      name: {{ include "common.fullname" $root }}-{{ $name | replace "_" "-"  }}
+      name: {{ include "archetype.fullname" $root }}-{{ $name | replace "_" "-"  }}
 {{- with $job.pod.annotations }}
       annotations:
 {{ toYaml . | indent 8 }}
@@ -37,7 +37,7 @@ spec:
       - name: {{ include "common.name" $root }}
         image: {{ required "image.repository is required!" $root.Values.image.repository }}:{{ required "image.tag is required!" $root.Values.image.tag }}
         imagePullPolicy: {{ $root.Values.image.pullPolicy }}
-{{ include "common.env" $root | indent 8 }}
+{{ include "archetype.common.env" $root | indent 8 }}
         {{- if $job.pod.command }}
         command:
 {{ toYaml $job.pod.command | indent 8}}
@@ -51,14 +51,14 @@ spec:
         volumeMounts:
         - mountPath: {{ $root.Values.persistence.mountPath | quote }}
           name: storage
-{{ include "common.files.volumeMounts" $root | indent 8 }}
+{{ include "archetype.files.volumeMounts" $root | indent 8 }}
 {{- with $root.Values.resources }}
         resources:
 {{ toYaml . | indent 10 }}
 {{- end }}
       imagePullSecrets:
 {{- if $root.Values.dockercfg.enabled }}
-        - name: {{ include "common.fullname" $root }}
+        - name: {{ include "archetype.fullname" $root }}
 {{- end }}
 {{- with $root.Values.image.pullSecrets }}
       {{- range . }}
@@ -69,10 +69,10 @@ spec:
       - name: storage
       {{- if $root.Values.persistence.enabled }}
         persistentVolumeClaim:
-          claimName: {{ $root.Values.persistence.existingClaim | default (include "common.fullname" $root) }}
+          claimName: {{ $root.Values.persistence.existingClaim | default (include "archetype.fullname" $root) }}
       {{- else }}
         emptyDir: {}
       {{- end }}
-{{ include "common.files.volumes" $root | indent 6 }}
+{{ include "archetype.files.volumes" $root | indent 6 }}
 {{- end -}}
 {{- end -}}

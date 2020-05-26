@@ -1,43 +1,39 @@
 {{/* vim: set filetype=mustache: */}}
 
-{{- define "common.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
 {{/*
 Fullname of configMap/secret that contains environment variables
 */}}
-{{- define "common.env.fullname" -}}
+{{- define "archetype.env.fullname" -}}
 {{- $root := index . 0 -}}
 {{- $postfix := index . 1 -}}
-{{- printf "%s-%s-%s" (include "common.fullname" $root) "env" $postfix -}}
+{{- printf "%s-%s-%s" (include "archetype.fullname" $root) "env" $postfix -}}
 {{- end -}}
 
 {{/*
 Fullname of configMap/secret that contains files
 */}}
-{{- define "common.files.fullname" -}}
+{{- define "archetype.files.fullname" -}}
 {{- $root := index . 0 -}}
 {{- $postfix := index . 1 -}}
-{{- printf "%s-%s-%s" (include "common.fullname" $root) "files" $postfix -}}
+{{- printf "%s-%s-%s" (include "archetype.fullname" $root) "files" $postfix -}}
 {{- end -}}
 
-{{- define "configmap.name" -}}
+{{- define "archetype.configmap.name" -}}
 {{- default (printf "%s-config" .Values.app  | trunc 54 | trimSuffix "-") | lower -}}
 {{- end -}}
 
-{{- define "service.name" -}}
+{{- define "archetype.service.name" -}}
 {{- default (printf "%s-svc" .Values.app | trunc 54 | trimSuffix "-") | lower -}}
 {{- end -}}
 
-{{- define "spark.configmap.name" -}}
+{{- define "archetype.archetype.spark.configmap.name" -}}
 {{- default (printf "%s-configmap" .Values.app | lower | trunc 54 | trimSuffix "-") .Values.fullnameOverride -}}
 {{- end -}}
 
 {{/*
 Environment template block for deployable resources
 */}}
-{{- define "common.env" -}}
+{{- define "archetype.common.env" -}}
 {{- $root := . -}}
 {{- if or ($root.Values.configMaps $root.Values.secrets) }}
 envFrom:
@@ -45,7 +41,7 @@ envFrom:
 {{- if $config.enabled }}
 {{- if not ( empty $config.env ) }}
 - configMapRef:
-    name: {{ include "common.env.fullname" (list $root $name) }}
+    name: {{ include "archetype.env.fullname" (list $root $name) }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -55,22 +51,23 @@ envFrom:
 {{- if $secret.enabled }}
 {{- if not ( empty $secret.env ) }}
 - secretRef:
-    name: {{ include "common.env.fullname" (list $root $name) }}-env
+    name: {{ include "archetype.env.fullname" (list $root $name) }}-env
 {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
+
 {{/*
 Volumes template block for deployable resources
 */}}
-{{- define "common.files.volumes" -}}
+{{- define "archetype.files.volumes" -}}
 {{- $root := . -}}
 {{- $config := $root.Values.configMaps -}}
 {{- if $config.enabled }}
 {{- if not ( empty $config.files ) }}
 - name: config-files
   configMap:
-    name: {{ include "common.shortname" $root }}
+    name: {{ include "archetype.shortname" $root }}
 {{- end }}
 {{- end }}
 
@@ -79,7 +76,7 @@ Volumes template block for deployable resources
 {{- if not ( empty $secret.files ) }}
 - name: secret-{{ $name }}-files
   secret:
-    secretName: {{ include "common.files.fullname" (list $root $name) }}
+    secretName: {{ include "archetype.files.fullname" (list $root $name) }}
 {{- end }}
 {{- end }}
 {{- end -}}
@@ -88,7 +85,7 @@ Volumes template block for deployable resources
 {{/*
 VolumeMounts template block for deployable resources
 */}}
-{{- define "common.files.volumeMounts" -}}
+{{- define "archetype.files.volumeMounts" -}}
 {{- range $name, $config := .Values.configMaps -}}
 {{- if $config.enabled }}
 {{- if not ( empty $config.files ) }}
@@ -108,16 +105,16 @@ VolumeMounts template block for deployable resources
 {{- end -}}
 {{- end -}}
 
-{{- define "common.ingress.service" -}}
+{{- define "archetype.ingress.service" -}}
 http:
   paths:
   - backend:
-      serviceName: {{ include "common.fullname" . }}
+      serviceName: {{ include "archetype.fullname" . }}
       servicePort: {{ .Values.ports.external }}
     path: "/"
 {{- end -}}
 
-{{- define "common.container.ports" -}}
+{{- define "archetype.container.ports" -}}
 - name: www
   containerPort: {{ .Values.ports.internal }}
 - name: metrics
@@ -128,12 +125,12 @@ http:
 {{- .Values.app | default (include "common.name" . ) -}}
 {{- end -}}
 
-{{- define "common.service.selectors" -}}
+{{- define "archetype.service.selectors" -}}
 app: {{ template "archetype.appname" . | quote }}
 release: {{ .Release.Name | quote }}
 {{- end -}}
 
-{{- define "common.service.ports" -}}
+{{- define "archetype.service.ports" -}}
 - name: http
   protocol: TCP
   port: {{ .Values.ports.external }}
@@ -144,7 +141,7 @@ release: {{ .Release.Name | quote }}
   targetPort: {{ .Values.ports.tls_internal }}
 {{- end -}}
 
-{{- define "spark.jmxmonitoring" -}}
+{{- define "archetype.spark.jmxmonitoring" -}}
 exposeDriverMetrics: true
 exposeExecutorMetrics: true
 port: {{ .Values.ports.jmx }}
@@ -152,7 +149,7 @@ prometheus:
   jmxExporterJar: "/prometheus/jmx_prometheus_javaagent-0.11.0.jar"
 {{- end -}}
 
-{{- define "spark.configmap" -}}
+{{- define "archetype.spark.configmap" -}}
 volumeMounts:
 - name: config-vol
   mountPath: /opt/spark
@@ -162,17 +159,6 @@ volumeMounts:
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- /*
-common.chartref prints a chart name and version.
-It does minimal escaping for use in Kubernetes labels.
-
-Example output:
-  zookeeper-1.2.3
-  wordpress-3.2.1_20170219
-*/ -}}
-{{- define "common.chartref" -}}
-{{- replace "+" "_" .Chart.Version | printf "%s-%s" .Chart.Name -}}
-{{- end -}}
 
 {{- /*
 archetype.zonemap returns a short name for the zone.
@@ -227,16 +213,6 @@ kubernetes.io/ingress.class: {{ $class | quote }}
 {{- end -}}
 {{- end -}}
 
-{{- define "common.fullname" -}}
-{{- $base := default (printf "%s-%s" .Release.Name .Chart.Name) .Values.fullnameOverride -}}
-{{- $gpre := default "" .Values.global.fullnamePrefix -}}
-{{- $pre := default "" .Values.fullnamePrefix -}}
-{{- $suf := default "" .Values.fullnameSuffix -}}
-{{- $gsuf := default "" .Values.global.fullnameSuffix -}}
-{{- $name := print $gpre $pre $base $suf $gsuf -}}
-{{- $name | lower | trunc 54 | trimSuffix "-" -}}
-{{- end -}}
-
 {{- define "archetype.fullname" -}}
 {{- $base := default (printf "%s-%s" .Release.Name .Chart.Name) .Values.fullnameOverride -}}
 {{- $gpre := default "" .Values.global.fullnamePrefix -}}
@@ -248,14 +224,14 @@ kubernetes.io/ingress.class: {{ $class | quote }}
 {{- end -}}
 
 {{- /*
-common.fullname.unique adds a random suffix to the unique name.
-This takes the same parameters as common.fullname
+archetype.fullname.unique adds a random suffix to the unique name.
+This takes the same parameters as archetype.fullname
 */ -}}
-{{- define "common.fullname.unique" -}}
-{{ template "common.fullname" . }}-{{ randAlphaNum 7 | lower }}
+{{- define "archetype.fullname.unique" -}}
+{{ template "archetype.fullname" . }}-{{ randAlphaNum 7 | lower }}
 {{- end }}
 
-{{- define "common.shortname" -}}
+{{- define "archetype.shortname" -}}
 {{- $base := default (printf "%s" .Release.Name) .Values.fullnameOverride -}}
 {{- $name := print $base -}}
 {{- $name | lower | trunc 54 | trimSuffix "-" -}}
@@ -264,7 +240,7 @@ This takes the same parameters as common.fullname
 {{- /*
 standard labels for project deployments
 */ -}}
-{{- define "common.labels" -}}
+{{- define "archetype.labels" -}}
 app: {{ include "archetype.appname" . | quote }}
 chart: {{ template "common.chartref" . }}
 heritage: {{ .Release.Service | quote }}

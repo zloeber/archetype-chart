@@ -14,14 +14,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "configmap.name" $root }}
+  name: {{ include "archetype.configmap.name" $root }}
 {{- with $configmap.annotations }}
   annotations:
 {{- toYaml . | nindent 4 }}
 {{- end }}
   labels:
     component: env
-{{ include "common.labels" $root | indent 4 }}
+{{ include "archetype.labels" $root | indent 4 }}
 data:
 {{- with $configmap.env }}
 {{- toYaml . | nindent 2 }}
@@ -33,14 +33,14 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "configmap.name" $root }}-files
+  name: {{ include "archetype.configmap.name" $root }}-files
 {{- with $configmap.annotations }}
   annotations:
     {{ toYaml . | nindent 4 }}
 {{- end }}
   labels:
     component: files
-    {{ include "common.labels" $root | nindent 4 }}
+    {{ include "archetype.labels" $root | nindent 4 }}
 data:
 {{- if $fileglob }}
 {{- range $key, $value := $configmap.files }}

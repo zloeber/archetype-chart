@@ -11,13 +11,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "common.fullname" . }}
+  name: {{ include "archetype.fullname" . }}
 {{- with $deployment.annotations }}
   annotations:
     {{ toYaml . | nindent 4 }}
 {{- end }}
   labels:
-    {{- include "common.labels" $root | nindent 4 }}
+    {{- include "archetype.labels" $root | nindent 4 }}
     {{- with $deployment.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -30,7 +30,7 @@ spec:
       {{- if $deployment.matchLabels }}
       {{- toYaml $deployment.matchLabels | nindent 6 }}
       {{- else }}
-      {{- include "common.service.selectors" $root | nindent 6 }}
+      {{- include "archetype.service.selectors" $root | nindent 6 }}
       {{- end }}
   {{- with $deployment.strategy }}
   strategy:
@@ -39,7 +39,7 @@ spec:
   revisionHistoryLimit: {{ $deployment.revisionHistoryLimit | default "10" }}
   template:
     metadata:
-      name: {{ include "common.fullname" . }}
+      name: {{ include "archetype.fullname" . }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
@@ -47,7 +47,7 @@ spec:
         {{ toYaml . | nindent 8 }}
         {{- end }}
       labels:
-{{ include "common.service.selectors" $root | indent 8 }}
+{{ include "archetype.service.selectors" $root | indent 8 }}
 {{- if $deployment.pod }}
 {{- with $deployment.pod.labels }}
 {{ toYaml . | indent 8 }}
@@ -55,7 +55,7 @@ spec:
 {{- end }}
     spec:
       containers:
-      - name: {{ include "common.fullname" . }}
+      - name: {{ include "archetype.fullname" . }}
         image: {{ required "image.repository is required!" .Values.image.repository }}:{{ required "image.tag is required!" .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
 {{- if $deployment.pod.env }}
@@ -65,10 +65,10 @@ spec:
 {{- if .Values.configMaps.enabled }}
         envFrom:
           - configMapRef:
-              name: {{ include "configmap.name" $root }}
+              name: {{ include "archetype.configmap.name" $root }}
 {{- if .Values.configMaps.files }}
           - configMapRef:
-              name: {{ include "configmap.name" $root }}-files
+              name: {{ include "archetype.configmap.name" $root }}-files
 {{- end }}
 {{- end }}
 
@@ -107,13 +107,13 @@ spec:
         {{- end }}
         {{- end }}
         {{- else }}
-          {{- include "common.container.ports" $root | nindent 10 }}
+          {{- include "archetype.container.ports" $root | nindent 10 }}
         {{- end }}
         {{- if .Values.persistence.enabled }}
         volumeMounts:
         - mountPath: {{ .Values.persistence.mountPath | quote }}
           name: storage
-        {{ include "common.files.volumeMounts" . | nindent 8 }}
+        {{ include "archetype.files.volumeMounts" . | nindent 8 }}
         {{- end }}
         {{- with .Values.probes }}
         probes:
@@ -126,7 +126,7 @@ spec:
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
 {{- if .Values.dockercfg.enabled }}
-        - name: {{ include "common.fullname" . }}
+        - name: {{ include "archetype.fullname" . }}
 {{- end }}
 {{- with .Values.image.pullSecrets }}
 {{- range . }}
@@ -151,11 +151,11 @@ spec:
         - name: storage
 {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "common.fullname" .) }}
+            claimName: {{ .Values.persistence.existingClaim | default (include "archetype.fullname" .) }}
 {{- else }}
           emptyDir: {}
 {{- end }}
 {{- end }}
-{{ include "common.files.volumes" . | indent 6 }}
+{{ include "archetype.files.volumes" . | indent 6 }}
 {{- end -}}
 {{- end -}}

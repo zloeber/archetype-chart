@@ -10,7 +10,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "common.shortname" $root }}
+  name: {{ include "archetype.shortname" $root }}
   annotations:
 {{- if hasKey $config "annotations" }}
     {{- with $config.annotations }}
@@ -34,8 +34,8 @@ metadata:
     ingress.kubernetes.io/rewrite-target: {{ $config.rewriteTarget | default "/" | quote }}
 {{- end }}
   labels:
-    ingressName: {{ include "common.shortname" $root }}
-    {{- include "common.labels" $root | nindent 4 }}
+    ingressName: {{ include "archetype.shortname" $root }}
+    {{- include "archetype.labels" $root | nindent 4 }}
 {{- with $config.labels }}
     {{ toYaml . | nindent 4 }}
 {{- end }}
@@ -46,7 +46,7 @@ spec:
 {{- if $host.config }}
 {{ $host.config | toYaml | indent 4 }}
 {{- else }}
-{{ include "common.ingress.service" $root | indent 4 }}
+{{ include "archetype.ingress.service" $root | indent 4 }}
 {{- end }}
 {{- if or $config.tlsEnabled $host.secretName }}
   tls:
@@ -58,7 +58,7 @@ spec:
     {{- if $host.secretName }}
       secretName: {{ $host.secretName }}
     {{- else }}
-      secretName: {{ include "common.shortname" $root }}-cert
+      secretName: {{ include "archetype.shortname" $root }}-cert
     {{- end }}
 {{- end }}
 {{- end }}

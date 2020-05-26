@@ -3,13 +3,13 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ include "common.fullname" . }}
+  name: {{ include "archetype.fullname" . }}
 {{- with .Values.persistence.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
   labels:
-{{ include "common.labels" . | indent 4 }}
+{{ include "archetype.labels" . | indent 4 }}
 {{- with .Values.persistence.labels }}
 {{ toYaml .| indent 4 }}
 {{- end }}

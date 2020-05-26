@@ -11,12 +11,12 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ include "common.fullname" $root }}-rules
+  name: {{ include "archetype.fullname" $root }}-rules
   namespace: {{ .Values.prometheus.namespace | default "monitoring" | quote }}
   labels:
     role: alert-rules
     prometheus: {{ .Values.prometheus.instance | default "kube-prometheus" | quote }}
-    {{- include "common.labels" $root | nindent 4 }}
+    {{- include "archetype.labels" $root | nindent 4 }}
 spec:
   groups:
   - name: {{ .Values.app }}.rules
@@ -26,7 +26,7 @@ spec:
       for: 2m
       labels:
         severity: critical
-        {{- include "common.labels" $root | nindent 8 }}
+        {{- include "archetype.labels" $root | nindent 8 }}
       annotations:
         summary: 'Pod: {{`{{ $labels.pod }}`}} is down with and error or failure'
         description: 'Pod: {{ `{{ $labels.namespace }}` }}/{{ `{{ $labels.pod }}` }} is down with and error or failure!'
@@ -36,7 +36,7 @@ spec:
       for: 5m
       labels:
         severity: warning
-        {{- include "common.labels" $root | nindent 8 }}
+        {{- include "archetype.labels" $root | nindent 8 }}
       annotations:
         description: 'Services down in {{ `{{ $labels.namespace }}` }}'
         summary: Service Failure
@@ -46,7 +46,7 @@ spec:
       for: 5m
       labels:
         severity: warning
-        {{- include "common.labels" $root | nindent 8 }}
+        {{- include "archetype.labels" $root | nindent 8 }}
       annotations:
         summary: 'Pod: {{ `{{ $labels.pod }}` }} is in pending state for 15 minutes'
         description: 'Pod: {{ `{{ $labels.namespace }}` }}/{{ `{{ $labels.pod }}` }} is in pending state for 15 minutes!'
@@ -56,7 +56,7 @@ spec:
       for: 10m
       labels:
         severity: critical
-        {{- include "common.labels" $root | nindent 8 }}
+        {{- include "archetype.labels" $root | nindent 8 }}
       annotations:
         summary: 'Pod {{ .Release.Namespace }}/{{ `{{ $labels.pod }}` }} ({{ `{{ $labels.container }}` }}) is restarting {{ `{{ printf "%.2f" $value }}` }} times / 5 minutes.'
         description: 'Pod {{ .Release.Namespace }}/{{ `{{ $labels.pod }}` }} ({{ `{{ $labels.container }}` }}) is restarting {{ `{{ printf "%.2f" $value }}` }} times / 5 minutes.'
@@ -66,7 +66,7 @@ spec:
       for: 5m
       labels:
         severity: warning
-        {{- include "common.labels" $root | nindent 8 }}
+        {{- include "archetype.labels" $root | nindent 8 }}
       annotations:
         summary: "JVM memory filling up (instance {{ `{{ $labels.instance }}` }})"
         description: "JVM memory is filling up (> 80%)\n  VALUE = {{ `{{ $value }}` }}\n  LABELS: {{ `{{ $labels }}` }}"

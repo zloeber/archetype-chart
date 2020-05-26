@@ -7,7 +7,7 @@
 {{- with merge $noValues $overrides $common -}}
 
 {{- $config := .Values.ingress -}}
-{{- $defaultService := include "common.ingress.service" . -}}
+{{- $defaultService := include "archetype.ingress.service" . -}}
 
 
 {{- $fileglob := $config.fileglob | default false -}}
@@ -17,9 +17,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "common.shortname" $root }}-test-ingress-{{ $i }}"
+  name: "{{ include "archetype.shortname" $root }}-test-ingress-{{ $i }}"
   labels:
-{{ include "common.labels" $root | indent 4 }}
+{{ include "archetype.labels" $root | indent 4 }}
   annotations:
     "helm.sh/hook": post-install,test-success
 spec:
