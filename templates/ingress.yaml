@@ -42,7 +42,7 @@ metadata:
 spec:
   rules:
 {{- range $host := $config.hosts }}
-  {{- if hasKey $config "name" }}
+  {{- if hasKey $host "name" }}
   - host: {{ $host.name | quote }}
   {{- else }}
   - host: {{ include "archetype.appname" }}.{{ include "archetype.clusterdns" }}
@@ -55,7 +55,7 @@ spec:
   {{- if or $config.tlsEnabled $host.secretName }}
   tls:
     - hosts:
-    {{- if hasKey $config "name" }}
+    {{- if hasKey $host "name" }}
       - {{ $host.name | quote }}
     {{- else }}
       - {{ include "archetype.appname" }}.{{ include "archetype.clusterdns" }}
