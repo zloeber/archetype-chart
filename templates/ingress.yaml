@@ -42,16 +42,24 @@ metadata:
 spec:
   rules:
 {{- range $host := $config.hosts }}
+  {{- if hasKey $config "name" }}
   - host: {{ $host.name | quote }}
-{{- if $host.config }}
-{{ $host.config | toYaml | indent 4 }}
-{{- else }}
-{{ include "archetype.ingress.service" $root | indent 4 }}
-{{- end }}
-{{- if or $config.tlsEnabled $host.secretName }}
+  {{- else }}
+  - host: {{ include "archetype.appname" }}.{{ include "archetype.clusterdns" }}
+  {{- end }}
+  {{- if $host.config }}
+    {{ $host.config | toYaml | indent 4 }}
+  {{- else }}
+    {{ include "archetype.ingress.service" $root | indent 4 }}
+  {{- end }}
+  {{- if or $config.tlsEnabled $host.secretName }}
   tls:
     - hosts:
+    {{- if hasKey $config "name" }}
       - {{ $host.name | quote }}
+    {{- else }}
+      - {{ include "archetype.appname" }}.{{ include "archetype.clusterdns" }}
+    {{- end }}
     {{- range $host.additionalhosts }}
       - {{ . }}
     {{- end }}
@@ -60,7 +68,7 @@ spec:
     {{- else }}
       secretName: {{ include "archetype.shortname" $root }}-cert
     {{- end }}
-{{- end }}
+  {{- end }}
 {{- end }}
 {{- end }}
 {{- end -}}
