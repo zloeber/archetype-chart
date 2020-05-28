@@ -48,9 +48,9 @@ spec:
     - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
 {{- end }}
 {{- if $host.config }}
-    {{ $host.config | toYaml | nindent 4 }}
+    {{ $host.config | toYaml | nindent 6 }}
 {{- else }}
-{{- include "archetype.ingress.service" $root | nindent 4 }}
+{{- include "archetype.ingress.service" $root | nindent 6 }}
 {{- end }}
 {{- if or $config.tlsEnabled $host.secretName }}
   tls:
