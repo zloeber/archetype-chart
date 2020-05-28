@@ -168,6 +168,8 @@ archetype.zonemap returns a short name for the zone.
 {{- $zone := index . 1 -}}
 {{- if hasKey $zoneMap $zone }}
 {{- index $zoneMap $zone -}}
+{{- else }}
+{{- printf "%s" "internal" -}}
 {{- end }}
 {{- end -}}
 
