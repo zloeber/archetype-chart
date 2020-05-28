@@ -1,9 +1,7 @@
 {{- $root := . -}}
-{{- $common := dict "Values" .Values.common -}}
-{{- $noCommon := omit .Values "common" -}}
 {{- $overrides := dict "Values" $noCommon -}}
 {{- $noValues := omit . "Values" -}}
-{{- with merge $noValues $overrides $common -}}
+{{- with merge $noValues $overrides -}}
 {{- $config := .Values.ingress -}}
 
 {{- if and $config.enabled ( eq $config.type "standard" ) }}
@@ -45,7 +43,7 @@ spec:
 {{- if hasKey $host "name" }}
     host: {{ $host.name | quote }}
 {{- else }}
-    host: {{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" }}
+    host: {{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}
 {{- end }}
 {{- if $host.config }}
     {{ $host.config | toYaml | indent 4 }}
@@ -58,7 +56,7 @@ spec:
 {{- if $host.name }}
       - {{- $host.name | quote }}
 {{- else }}
-      - {{- include "archetype.appname" $root }}.{{ include "archetype.clusterdns" }}
+      - {{- include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}
 {{- end }}
 {{- range $host.additionalhosts }}
       - {{ . }}
