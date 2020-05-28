@@ -45,7 +45,7 @@ spec:
   {{- if hasKey $host "name" }}
   - host: {{ $host.name | quote }}
   {{- else }}
-  - host: {{ include "archetype.appname" }}.{{ include "archetype.clusterdns" }}
+  - host: {{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" }}
   {{- end }}
   {{- if $host.config }}
     {{ $host.config | toYaml | indent 4 }}
@@ -58,7 +58,7 @@ spec:
     {{- if hasKey $host "name" }}
       - {{ $host.name | quote }}
     {{- else }}
-      - {{ include "archetype.appname" }}.{{ include "archetype.clusterdns" }}
+      - {{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" }}
     {{- end }}
     {{- range $host.additionalhosts }}
       - {{ . }}
