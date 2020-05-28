@@ -46,7 +46,7 @@ spec:
     - host: {{ $host.name | quote }}
 {{- else }}
     - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
-{{- end }}
+{{- end -}}
 {{- if $host.config }}
     {{ $host.config | toYaml | nindent 6 }}
 {{- else }}
