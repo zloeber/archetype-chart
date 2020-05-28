@@ -56,17 +56,17 @@ spec:
   tls:
     - hosts:
 {{- if $host.name }}
-      - {{- $host.name | quote }}
+      - {{ $host.name | quote }}
 {{- else }}
-      - {{- include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}
+      - {{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}
 {{- end }}
 {{- range $host.additionalhosts }}
       - {{ . }}
 {{- end }}
 {{- if $host.secretName }}
-      secretName: {{ $host.secretName }}
+    secretName: {{ $host.secretName }}
 {{- else }}
-      secretName: {{ include "archetype.shortname" $root }}-cert
+    secretName: {{ include "archetype.shortname" $root }}-cert
 {{- end }}
 {{- end }}
 {{- end }}
