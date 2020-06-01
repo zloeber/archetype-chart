@@ -35,6 +35,7 @@ metadata:
 {{- end }}
   labels:
     ingressName: {{ include "archetype.shortname" $root }}
+    dnsRoot: {{ .Values.dnsRoot }}
     {{- include "archetype.labels" $root | nindent 4 }}
 {{- with $config.labels }}
     {{ toYaml . | nindent 4 }}
