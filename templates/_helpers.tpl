@@ -202,7 +202,7 @@ archetype.clusterdns prints a derived dns name based on zone
 */ -}}
 {{- define "archetype.clusterdns" -}}
 {{- $zone := include "archetype.zonemap" (list .Values.zoneMap .Values.zone) -}}
-{{- printf "%s.%s" $zone .Values.dnsZone | trimPrefix "." -}}
+{{- printf "%s.%s" $zone .Values.dnsRoot | trimPrefix "." -}}
 {{- end -}}
 
 {{- /*

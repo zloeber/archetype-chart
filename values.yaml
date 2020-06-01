@@ -2,7 +2,7 @@
 app: appname
 cloud: local # Can be used to implement cloud specific internal loadbalancers (for example)
 zone: internal # Used by various lookups
-dnsZone: micro.svc # root level dns zone for this cluster
+dnsRoot: micro.svc # root level dns zone for this cluster
 ingressClass: nginx
 replicaCount: 1 # default deployment replica count
 enablePrometheusScrape: false
