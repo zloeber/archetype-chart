@@ -8,7 +8,7 @@ metadata:
   name: {{ include "archetype.fullname" $root }}-{{ $name | replace "_" "-"  }}
 {{- with $job.annotations }}
   annotations:
-{{ toYaml . | indent 4 }}
+    {{ toYaml . | nindent 4 }}
 {{- end }}
   labels:
     {{- include "archetype.labels" $root | nindent 4 }}
@@ -21,8 +21,8 @@ spec:
     metadata:
       name: {{ include "archetype.fullname" $root }}-{{ $name | replace "_" "-"  }}
 {{- with $job.pod.annotations }}
-      annotations:
-{{ toYaml . | nindent 8 }}
+  annotations:
+    {{ toYaml . | nindent 6 }}
 {{- end }}
       labels:
         app: {{ include "common.name" $root }}
