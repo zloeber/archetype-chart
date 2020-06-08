@@ -20,33 +20,26 @@ spec:
   template:
     metadata:
       name: {{ include "archetype.fullname" $root }}-{{ $name | replace "_" "-"  }}
-{{- with $job.pod.annotations }}
-  annotations:
-    {{ toYaml . | nindent 6 }}
-{{- end }}
       labels:
         app: {{ include "common.name" $root }}
         release: {{ $root.Release.Name | quote }}
-{{- with $job.pod.labels }}
-{{ toYaml .| nindent 8 }}
-{{- end }}
     spec:
       restartPolicy: '{{ default "Never" $job.restartPolicy }}'
       containers:
       - name: {{ include "common.name" $root }}
         image: {{ required "image.repository is required!" $root.Values.image.repository }}:{{ required "image.tag is required!" $root.Values.image.tag }}
         imagePullPolicy: {{ $root.Values.image.pullPolicy }}
-{{ include "archetype.common.env" $root | indent 8 }}
+        {{ include "archetype.common.env" $root | nindent 8 }}
         {{- if $job.pod.command }}
         command:
-{{ toYaml $job.pod.command | indent 8}}
+        {{ toYaml $job.pod.command | nindent 8}}
         {{- end }}
         args:
-{{ toYaml $job.pod.args | indent 8 }}
-{{- with $job.pod.securityContext }}
+          {{ toYaml $job.pod.args | nindent 8 }}
+        {{- with $job.pod.securityContext }}
         securityContext:
-{{ toYaml . | indent 10 }}
-{{- end }}
+          {{ toYaml . | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - mountPath: {{ $root.Values.persistence.mountPath | quote }}
           name: storage
