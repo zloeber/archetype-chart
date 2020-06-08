@@ -32,11 +32,11 @@ spec:
         env:
           {{ toYaml . | nindent 10 }}
         {{- end }}
-        {{- if $root.Values..configMap.enabled }}
+        {{- if $root.Values.configMap.enabled }}
         envFrom:
           - configMapRef:
               name: {{ include "archetype.configmap.name" $root }}
-          {{- if $root.Values..configMap.files }}
+          {{- if $root.Values.configMap.files }}
           - configMapRef:
               name: {{ include "archetype.configmap.name" $root }}-files
           {{- end }}
