@@ -11,7 +11,6 @@ metadata:
 {{ toYaml . | indent 4 }}
 {{- end }}
   labels:
-{{ include "archetype.labels.standard" $root | indent 4 }}
 {{ include "archetype.labels" . | indent 4 }}
 {{- with $job.labels }}
 {{ toYaml . | indent 4 }}
