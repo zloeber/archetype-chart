@@ -32,11 +32,11 @@ spec:
         env:
           {{ toYaml . | nindent 10 }}
         {{- end }}
-        {{- if .Values.configMap.enabled }}
+        {{- if $root.Values..configMap.enabled }}
         envFrom:
           - configMapRef:
               name: {{ include "archetype.configmap.name" $root }}
-          {{- if .Values.configMap.files }}
+          {{- if $root.Values..configMap.files }}
           - configMapRef:
               name: {{ include "archetype.configmap.name" $root }}-files
           {{- end }}
@@ -78,6 +78,6 @@ spec:
       {{- else }}
         emptyDir: {}
       {{- end }}
-{{ include "archetype.files.volumes" $root | indent 6 }}
+      {{ include "archetype.files.volumes" $root | nindent 6 }}
 {{- end -}}
 {{- end -}}
