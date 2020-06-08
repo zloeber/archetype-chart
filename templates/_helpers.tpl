@@ -35,9 +35,9 @@ Environment template block for deployable resources
 */}}
 {{- define "archetype.common.env" -}}
 {{- $root := . -}}
-{{- if or ($root.Values.configMaps $root.Values.secrets) }}
+{{- if or ($root.Values.configMap $root.Values.secrets) }}
 envFrom:
-{{- range $name, $config := $root.Values.configMaps -}}
+{{- range $name, $config := $root.Values.configMap -}}
 {{- if $config.enabled }}
 {{- if not ( empty $config.env ) }}
 - configMapRef:
@@ -62,7 +62,7 @@ Volumes template block for deployable resources
 */}}
 {{- define "archetype.files.volumes" -}}
 {{- $root := . -}}
-{{- $config := $root.Values.configMaps -}}
+{{- $config := $root.Values.configMap -}}
 {{- if $config.enabled }}
 {{- if not ( empty $config.files ) }}
 - name: config-files
@@ -86,7 +86,7 @@ Volumes template block for deployable resources
 VolumeMounts template block for deployable resources
 */}}
 {{- define "archetype.files.volumeMounts" -}}
-{{- range $name, $config := .Values.configMaps -}}
+{{- range $name, $config := .Values.configMap -}}
 {{- if $config.enabled }}
 {{- if not ( empty $config.files ) }}
 - mountPath: {{ default (printf "/%s" $name) $config.mountPath }}

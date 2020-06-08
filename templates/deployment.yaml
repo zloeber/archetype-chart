@@ -62,11 +62,11 @@ spec:
         env:
           {{ $deployment.pod.env | toYaml | nindent 10 }}
 {{- end }}
-{{- if .Values.configMaps.enabled }}
+{{- if .Values.configMap.enabled }}
         envFrom:
           - configMapRef:
               name: {{ include "archetype.configmap.name" $root }}
-{{- if .Values.configMaps.files }}
+{{- if .Values.configMap.files }}
           - configMapRef:
               name: {{ include "archetype.configmap.name" $root }}-files
 {{- end }}

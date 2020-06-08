@@ -124,7 +124,7 @@ affinity:
   nodePoolLabel: agentpool
   nodePoolTarget: workload
 
-configMaps:
+configMap:
   enabled: false
   #   mountPath: /config-default
   #   annotations:

@@ -3,7 +3,7 @@
 {{- $noCommon := omit .Values "common" -}}
 {{- $overrides := dict "Values" $noCommon -}}
 {{- $noValues := omit . "Values" -}}
-{{- $configmap := .Values.configMaps -}}
+{{- $configmap := .Values.configMap -}}
 
 {{- with merge $noValues $overrides $common -}}
 {{- if $configmap.enabled }}
@@ -15,16 +15,16 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "archetype.configmap.name" $root }}
-{{- with $configmap.annotations }}
+  {{- with $configmap.annotations }}
   annotations:
-{{- toYaml . | nindent 4 }}
-{{- end }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   labels:
     component: env
-{{ include "archetype.labels" $root | indent 4 }}
+    {{ include "archetype.labels" $root | nindent 4 }}
 data:
 {{- with $configmap.env }}
-{{- toYaml . | nindent 2 }}
+  {{- toYaml . | nindent 2 }}
 {{- end }}
 {{- end }}
 
@@ -34,10 +34,10 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "archetype.configmap.name" $root }}-files
-{{- with $configmap.annotations }}
+  {{- with $configmap.annotations }}
   annotations:
     {{ toYaml . | nindent 4 }}
-{{- end }}
+  {{- end }}
   labels:
     component: files
     {{ include "archetype.labels" $root | nindent 4 }}
