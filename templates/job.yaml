@@ -29,7 +29,6 @@ spec:
       - name: {{ include "common.name" $root }}
         image: {{ required "image.repository is required!" $root.Values.image.repository }}:{{ required "image.tag is required!" $root.Values.image.tag }}
         imagePullPolicy: {{ $root.Values.image.pullPolicy }}
-<<<<<<< HEAD
         {{- if $job.pod.env }}
         env:
           {{ $job.pod.env | toYaml | nindent 10 }}
@@ -46,21 +45,11 @@ spec:
         {{- with $job.pod.command }}
         command:
           {{ toYaml . | nindent 10 }}
-=======
-        {{ include "archetype.common.env" $root | nindent 8 }}
-        {{- if $job.pod.command }}
-        command:
-        {{ toYaml $job.pod.command | nindent 8}}
->>>>>>> 2d99865e05ee3dfe9756827c49fa3e3208559eac
         {{- end }}
-        {{- with $deployment.pod.args }}
+        {{- with $job.pod.args }}
         args:
-<<<<<<< HEAD
           {{ toYaml . | nindent 10 }}
         {{- end }}
-=======
-          {{ toYaml $job.pod.args | nindent 8 }}
->>>>>>> 2d99865e05ee3dfe9756827c49fa3e3208559eac
         {{- with $job.pod.securityContext }}
         securityContext:
           {{ toYaml . | nindent 10 }}
