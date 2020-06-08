@@ -86,12 +86,10 @@ Volumes template block for deployable resources
 VolumeMounts template block for deployable resources
 */}}
 {{- define "archetype.files.volumeMounts" -}}
-{{- range $name, $config := .Values.configMap -}}
-{{- if $config.enabled }}
-{{- if not ( empty $config.files ) }}
-- mountPath: {{ default (printf "/%s" $name) $config.mountPath }}
-  name: config-{{ $name }}-files
-{{- end }}
+{{- if .Values.configMap.enabled }}
+{{- if not ( empty .Values.configMap.files ) }}
+- mountPath: {{ default "/data" | .Values.configMap.mountPath }}
+  name: config-{{ include "archetype.appname" }}-files
 {{- end }}
 {{- end -}}
 {{- range $name, $secret := .Values.secrets -}}

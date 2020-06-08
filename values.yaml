@@ -126,6 +126,7 @@ affinity:
 
 configMap:
   enabled: false
+  #name: configmapname
   #   mountPath: /config-default
   #   annotations:
   #     name: value
