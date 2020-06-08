@@ -11,9 +11,9 @@ metadata:
 {{ toYaml . | indent 4 }}
 {{- end }}
   labels:
-{{ include "archetype.labels" . | indent 4 }}
+    {{- include "archetype.labels" $root | nindent 4 }}
 {{- with $job.labels }}
-{{ toYaml . | indent 4 }}
+{{ toYaml . | nindent 4 }}
 {{- end }}
 spec:
   activeDeadlineSeconds: {{ default 300 $job.activeDeadlineSeconds }}
@@ -22,13 +22,13 @@ spec:
       name: {{ include "archetype.fullname" $root }}-{{ $name | replace "_" "-"  }}
 {{- with $job.pod.annotations }}
       annotations:
-{{ toYaml . | indent 8 }}
+{{ toYaml . | nindent 8 }}
 {{- end }}
       labels:
         app: {{ include "common.name" $root }}
         release: {{ $root.Release.Name | quote }}
 {{- with $job.pod.labels }}
-{{ toYaml .| indent 8 }}
+{{ toYaml .| nindent 8 }}
 {{- end }}
     spec:
       restartPolicy: '{{ default "Never" $job.restartPolicy }}'
