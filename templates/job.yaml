@@ -36,34 +36,48 @@ spec:
       - name: {{ include "common.name" $root }}
         image: {{ required "image.repository is required!" $root.Values.image.repository }}:{{ required "image.tag is required!" $root.Values.image.tag }}
         imagePullPolicy: {{ $root.Values.image.pullPolicy }}
-{{ include "archetype.common.env" $root | indent 8 }}
-        {{- if $job.pod.command }}
-        command:
-{{ toYaml $job.pod.command | indent 8}}
+        {{- if $job.pod.env }}
+        env:
+          {{ $job.pod.env | toYaml | nindent 10 }}
         {{- end }}
+        {{- if .Values.configMaps.enabled }}
+        envFrom:
+          - configMapRef:
+              name: {{ include "archetype.configmap.name" $root }}
+          {{- if .Values.configMaps.files }}
+          - configMapRef:
+              name: {{ include "archetype.configmap.name" $root }}-files
+          {{- end }}
+        {{- end }}
+        {{- with $job.pod.command }}
+        command:
+          {{ toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with $deployment.pod.args }}
         args:
-{{ toYaml $job.pod.args | indent 8 }}
-{{- with $job.pod.securityContext }}
+          {{ toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with $job.pod.securityContext }}
         securityContext:
-{{ toYaml . | indent 10 }}
-{{- end }}
+          {{ toYaml . | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - mountPath: {{ $root.Values.persistence.mountPath | quote }}
           name: storage
-{{ include "archetype.files.volumeMounts" $root | indent 8 }}
-{{- with $root.Values.resources }}
+        {{ include "archetype.files.volumeMounts" $root | nindent 8 }}
+        {{- with $root.Values.resources }}
         resources:
-{{ toYaml . | indent 10 }}
-{{- end }}
+        {{ toYaml . | nindent 10 }}
+        {{- end }}
       imagePullSecrets:
-{{- if $root.Values.dockercfg.enabled }}
+      {{- if $root.Values.dockercfg.enabled }}
         - name: {{ include "archetype.fullname" $root }}
-{{- end }}
-{{- with $root.Values.image.pullSecrets }}
+      {{- end }}
+      {{- with $root.Values.image.pullSecrets }}
       {{- range . }}
         - name: {{ . }}
       {{- end }}
-{{- end }}
+      {{- end }}
       volumes:
       - name: storage
       {{- if $root.Values.persistence.enabled }}
