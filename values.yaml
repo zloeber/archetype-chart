@@ -309,24 +309,24 @@ daemonset:
     # command:
     args: []
 
-job:
-  default:
-    enabled: false
-    # labels:
-    #   name: value
-    # annotations:
-    #   name: value
-    restartPolicy: Never
-    pod:
-      # securityContext: {}
-      annotations: {}
-      env: {}
-      ## https://github.com/uswitch/kiam
-      ## https://github.com/jtblin/kube2iam
-      #  iam.amazonaws.com/role: role-arn
-      labels: {}
-      # command:
-      args: []
+jobs: {}
+  # default:
+  #   enabled: false
+  #   # labels:
+  #   #   name: value
+  #   # annotations:
+  #   #   name: value
+  #   restartPolicy: Never
+  #   pod:
+  #     # securityContext: {}
+  #     annotations: {}
+  #     env: {}
+  #     ## https://github.com/uswitch/kiam
+  #     ## https://github.com/jtblin/kube2iam
+  #     #  iam.amazonaws.com/role: role-arn
+  #     labels: {}
+  #     # command:
+  #     args: []
 
 cronjob:
   default:
