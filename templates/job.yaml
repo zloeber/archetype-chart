@@ -29,9 +29,9 @@ spec:
       - name: {{ include "common.name" $root }}
         image: {{ required "image.repository is required!" $root.Values.image.repository }}:{{ required "image.tag is required!" $root.Values.image.tag }}
         imagePullPolicy: {{ $root.Values.image.pullPolicy }}
-        {{- if $job.pod.env }}
+        {{- with $job.pod.env }}
         env:
-          {{ $job.pod.env | toYaml | nindent 10 }}
+          {{ toYaml . | nindent 10 }}
         {{- end }}
         {{- if .Values.configMaps.enabled }}
         envFrom:
