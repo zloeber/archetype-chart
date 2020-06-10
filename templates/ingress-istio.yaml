@@ -77,6 +77,9 @@ spec:
   {{- else }}
     - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
   {{- end -}}
+  {{- range $host.additionalhosts }}
+    - {{ . }}
+  {{- end }}
   {{- if $host.config }}
     {{- $host.config | toYaml | nindent 2 }}
   {{- else }}
