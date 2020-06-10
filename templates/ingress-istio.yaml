@@ -59,7 +59,11 @@ spec:
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: {{ $name }}
+{{- if $host.name }}
+  name: {{ $host.name }}
+{{- else }}
+  name: {{ include "archetype.shortname" $root }}-virtualservice
+{{- end }}
 spec:
   gateways:
   {{- if $serviceconfig.gateways }}
@@ -72,12 +76,12 @@ spec:
     - {{ include "archetype.shortname" $root }}-gateway
   {{- end }}
   hosts:
-  {{- if $host.name }}
-    - host: {{ $host.name | quote }}
+  {{- if $host.hostName }}
+    - host: {{ $host.hostName | quote }}
   {{- else }}
     - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
   {{- end -}}
-  {{- range $host.additionalhosts }}
+  {{- range $host.additionalHosts }}
     - {{ . }}
   {{- end }}
   {{- if $host.config }}
