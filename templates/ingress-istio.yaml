@@ -4,10 +4,10 @@
 {{- $overrides := dict "Values" $noCommon -}}
 {{- $noValues := omit . "Values" -}}
 {{- with merge $noValues $overrides $common -}}
-{{- $config := .Values.ingress -}}
+{{- $ingress := .Values.ingress -}}
 
-{{- if and $config.enabled (eq $config.type "istio") }}
-{{- if not ($config.gateway) }}
+{{- if and $ingress.enabled (eq $ingress.type "istio") }}
+{{- if not ($ingress.gateway) }}
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
@@ -26,23 +26,23 @@ spec:
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
-  {{- if $config.gateway.name }}
-  name: {{ $config.gateway.name }}
+  {{- if $ingress.gateway.name }}
+  name: {{ $ingress.gateway.name }}
   {{- else }}
   name: {{ include "archetype.shortname" $root }}-gateway
   {{- end }}
 spec:
   selector:
-  {{- if $config.gateway.selectors }}
-    {{- with $config.gateway.selectors }}
+  {{- if $ingress.gateway.selectors }}
+    {{- with $ingress.gateway.selectors }}
       {{ toYaml . | nindent 6 }}
     {{- end }}
   {{- else }}
     istio: ingressgateway
   {{- end }}
   servers:
-  {{- if $config.gateway.servers }}
-    {{- with $config.gateway.servers }}
+  {{- if $ingress.gateway.servers }}
+    {{- with $ingress.gateway.servers }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
   {{- else }}
@@ -54,7 +54,7 @@ spec:
         protocol: HTTP
 {{- end }}
 
-{{- range $host := $config.hosts }}
+{{- range $host := $ingress.hosts }}
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -66,12 +66,12 @@ metadata:
 {{- end }}
 spec:
   gateways:
-  {{- if $serviceconfig.gateways }}
-    {{- with $serviceconfig.gateways }}
+  {{- if $ingress.gateways }}
+    {{- with $ingress.gateways }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-  {{- else if $config.gateway.name }}
-    - {{ $config.gateway.name }}
+  {{- else if $ingress.gateway.name }}
+    - {{ $ingress.gateway.name }}
   {{- else }}
     - {{ include "archetype.shortname" $root }}-gateway
   {{- end }}
