@@ -1,0 +1,40 @@
+{{- $root := . -}}
+{{- $ingress := .Values.ingress -}}
+{{- if and $ingress.enabled (eq $ingress.type "istio") }}
+{{- range $host := $ingress.hosts }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+{{- if $host.name }}
+  name: {{ $host.name }}
+{{- else }}
+  name: {{ include "archetype.shortname" $root }}-virtualservice
+{{- end }}
+spec:
+  gateways:
+  {{- if $ingress.gateways }}
+    {{- with $ingress.gateways }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- else if $ingress.gateway.name }}
+    - {{ $ingress.gateway.name }}
+  {{- else }}
+    - {{ include "archetype.shortname" $root }}-gateway
+  {{- end }}
+  hosts:
+  {{- if $host.hostName }}
+    - host: {{ $host.hostName | quote }}
+  {{- else }}
+    - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
+  {{- end -}}
+  {{- range $host.additionalHosts }}
+    - {{ . }}
+  {{- end }}
+  {{- if $host.config }}
+    {{- $host.config | toYaml | nindent 2 }}
+  {{- else }}
+    {{- include "archetype.istio.virtualservice" $root | nindent 2 }}
+  {{- end }}
+{{- end }}
+{{- end -}}
