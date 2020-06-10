@@ -32,6 +32,7 @@ spec:
         name: http
         number: 80
         protocol: HTTP
+  {{- end }}
 {{- else }}
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
