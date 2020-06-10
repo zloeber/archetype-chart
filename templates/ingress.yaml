@@ -16,21 +16,21 @@ kind: Ingress
 metadata:
   name: {{ include "archetype.shortname" $root }}
   annotations:
-{{- if hasKey $config "annotations" }}
+    {{- if hasKey $config "annotations" }}
     {{- with $config.annotations }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
-{{- end }}
-{{- include "archetype.ingress.class" $root | nindent 4 }}
-{{- include "archetype.certissuer" (list .Values.certIssuerMap .Values.zone) | nindent 4 }}
-{{- if $config.forecastle }}
+    {{- end }}
+    {{- include "archetype.ingress.class" $root | nindent 4 }}
+    {{- include "archetype.certissuer" (list .Values.certIssuerMap .Values.zone) | nindent 4 }}
+    {{- if $config.forecastle }}
     forecastle.stakater.com/expose: {{ .Values.ingress.forecastle | quote }}
-{{- end }}
+    {{- end }}
     service.beta.kubernetes.io/{{ .Values.cloud | default "local" }}-load-balancer-internal: "true"
-{{- if $config.prometheusScraped }}
+    {{- if $config.prometheusScraped }}
     prometheus.io/scrape: "true"
     prometheus.io/port: {{ $config.prometheusPort | default .Values.ports.prometheus | quote }}
-{{- end }}
+    {{- end }}
 {{- if $config.enableSSLRedirect }}
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 {{- end }}
@@ -47,33 +47,34 @@ metadata:
 spec:
   rules:
 {{- range $host := $config.hosts }}
-{{- if $host.name }}
+    {{- if $host.name }}
     - host: {{ $host.name | quote }}
-{{- else }}
+    {{- else }}
     - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
-{{- end -}}
-{{- if $host.config }}
-{{- $host.config | toYaml | nindent 6 }}
-{{- else }}
-{{- include "archetype.ingress.service" $root | nindent 6 }}
-{{- end }}
+    {{- end -}}
+    {{- if $host.config }}
+    {{- $host.config | toYaml | nindent 6 }}
+    {{- else }}
+    {{- include "archetype.ingress.service" $root | nindent 6 }}
+    {{- end }}
 {{- if or $config.tlsEnabled $host.secretName }}
   tls:
     - hosts:
-{{- if $host.name }}
+    {{- if $host.name }}
       - {{ $host.name | quote }}
-{{- else }}
+    {{- else }}
       - {{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}
-{{- end }}
-{{- range $host.additionalhosts }}
+    {{- end }}
+    {{- range $host.additionalhosts }}
       - {{ . }}
-{{- end }}
-{{- if $host.secretName }}
+    {{- end }}
+    {{- if $host.secretName }}
       secretName: {{ $host.secretName }}
-{{- else }}
+    {{- else }}
       secretName: {{ include "archetype.shortname" $root }}-cert
+    {{- end }}
 {{- end }}
-{{- end }}
+
 {{- end }}
 {{- end }}
 {{- end -}}

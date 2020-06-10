@@ -12,3 +12,8 @@ Some chart elements have cluster requirements:
 - To use 'certificate' deployments cert-manager CRDs will need to be installed.
 - To use 'SparkApplication' deployments the google spark operator CRDs will need to be installed.
 - To use some rbac elements rbacmanager CRDs will need to be installed.
+
+
+## Credits
+
+The original (and best) (monochart)[https://github.com/cloudposse/charts/tree/master/incubator/monochart].

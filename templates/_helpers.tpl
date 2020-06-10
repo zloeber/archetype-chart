@@ -112,6 +112,18 @@ http:
     path: "/"
 {{- end -}}
 
+{{- define "archetype.istio.virtualservice" -}}
+http:
+- match:
+  - uri:
+      prefix: /
+  route:
+  - destination:
+      host: {{ include "archetype.fullname" . }}
+      port:
+        number: {{ .Values.ports.external }}
+{{- end -}}
+
 {{- define "archetype.container.ports" -}}
 - name: www
   containerPort: {{ .Values.ports.internal }}

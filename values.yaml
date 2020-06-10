@@ -204,25 +204,6 @@ service:
   # annotations:
   #   name: value
 
-# projectDeployment:
-#   enabled: false
-#   ## Pods replace strategy
-#   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-#   # strategy: {}
-#   revisionHistoryLimit: 10
-#   # annotations:
-#   #   name: value
-#   # labels:
-#   #   name: value
-#   pod:
-#     # securityContext: {}
-#     annotations: {}
-#     ## https://github.com/uswitch/kiam
-#     ## https://github.com/jtblin/kube2iam
-#     #  iam.amazonaws.com/role: role-arn
-#     labels: {}
-#     # command:
-#     args: []
 namespace:
   enabled: false
 
@@ -462,10 +443,6 @@ ingress:
   enabled: false
   type: standard
   zone: internal  # possible values = internal, external, staging
-  istio:
-    gateway: []
-    gatewaySelector:
-      istio: ingressgateway
   forecastle: false
   prometheusScraped: false
   prometheusPort: 5555
@@ -481,6 +458,18 @@ ingress:
   # annotations:
   #   # kubernetes.io/ingress.class: nginx
   #   # kubernetes.io/tls-acme: "true"
+  # gateway:
+  #   name: istio-dashboard-gateway
+  #   selectors:
+  #     istio: ingressgateway
+  #   servers:
+  #     - hosts:
+  #       - '*'
+  #       port:
+  #         name: http
+  #         number: 80
+  #         protocol: HTTP
+  
   hosts:
   # - name: kubeops.{{ requiredEnv "TARGET" }}.micro.svc
   #   config:
@@ -496,9 +485,21 @@ ingress:
   #      - domain.com
 
 # Istio Settings
-
-  #gateway:
-
+# ingress:
+#   enabled: true
+#   type: istio
+#   virtualservices:
+#     kiali:
+#       hosts:
+#       - kiali.my.url
+#       uri:
+#         prefix: /
+#       route:
+#       - destination:
+#           host: kiali
+#           port:
+#             number: 20001
+  
 # configmaps:
 #   coredns-custom:
 #     enabled: false

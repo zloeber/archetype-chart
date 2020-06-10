@@ -22,35 +22,67 @@ spec:
       name: http
       number: 80
       protocol: HTTP
+{{- else }}
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  {{- if $config.gateway.name }}
+  name: {{ $config.gateway.name }}
+  {{- else }}
+  name: {{ include "archetype.shortname" $root }}-gateway
+  {{- end }}
+spec:
+  selector:
+  {{- if $config.gateway.selectors }}
+    {{- with $config.gateway.selectors }}
+      {{ toYaml . | nindent 6 }}
+    {{- end }}
+  {{- else }}
+    istio: ingressgateway
+  {{- end }}
+  servers:
+  {{- if $config.gateway.servers }}
+    {{- with $config.gateway.servers }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
+  {{- else }}
+    - hosts:
+      - '*'
+      port:
+        name: http
+        number: 80
+        protocol: HTTP
 {{- end }}
 
+{{- range $host := $config.hosts }}
+---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: {{ include "archetype.shortname" $root }}-virtualservice
+  name: {{ $name }}
 spec:
   gateways:
-{{- if not ($config.istio.gateway) }}
-  - {{ include "archetype.shortname" $root }}-gateway
-{{- else }}
-{{- with $config.istio.gateway }}
-    {{ toYaml . | nindent 4 }}
-{{- end }}
-{{- end }}
+  {{- if $serviceconfig.gateways }}
+    {{- with $serviceconfig.gateways }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- else if $config.gateway.name }}
+    - {{ $config.gateway.name }}
+  {{- else }}
+    - {{ include "archetype.shortname" $root }}-gateway
+  {{- end }}
   hosts:
-{{- with $config.hosts }}
-    {{ toYaml . | nindent 4 }}
+  {{- if $host.name }}
+    - host: {{ $host.name | quote }}
+  {{- else }}
+    - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
+  {{- end -}}
+  {{- if $host.config }}
+    {{- $host.config | toYaml | nindent 2 }}
+  {{- else }}
+    {{- include "archetype.istio.virtualservice" $root | nindent 2 }}
+  {{- end }}
 {{- end }}
-  http:
-  - name: name: {{ include "archetype.shortname" $root }}-routes
-    match:
-    - uri:
-        prefix: /
-    route:
-    - destination:
-        host: kiali
-        port:
-          number: 20001
 {{- end }}
 
 {{- end -}}
