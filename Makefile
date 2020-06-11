@@ -1,7 +1,8 @@
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
-DIST_DIR ?= $(CURDIR)/dist
+DIST_PATH ?= $(CURDIR)/dist
+RELEASE_PATH ?= $(CURDIR)/releases
 CHART_DIR ?= $(CURDIR)
 TMPDIR ?= /tmp
 HELM_REPO ?= $(CURDIR)/charts
@@ -38,9 +39,10 @@ unit-test: helm-unittest ## Execute Unit Testing
 	@helm unittest --color --update-snapshot ./traefik
 	@echo "== Unit Tests Finished..."
 
-build: global-requirements dependency $(DIST_DIR) ## Generates an artefact containing the Helm Chart in the distribution directory
+build: global-requirements dependency $(DIST_PATH) ## Generates an artefact containing the Helm Chart in the distribution directory
 	@echo "== Building Chart..."
-	@helm package $(CHART_DIR) --destination=$(DIST_DIR)
+	@mkdir -p $(RELEASE_PATH)
+	@helm package $(CHART_DIR) --destination=$(RELEASE_PATH)
 	@echo "== Building Finished"
 
 dependency: ## Build dependencies
@@ -48,23 +50,23 @@ dependency: ## Build dependencies
 	@helm dependency update
 	@echo "== Building chart dependencies finished"
 
-deploy: global-requirements $(DIST_DIR) $(HELM_REPO) ## Prepare the Helm repository with the latest packaged charts
+deploy: global-requirements $(DIST_PATH) $(HELM_REPO) ## Prepare the Helm repository with the latest packaged charts
 	@echo "== Deploying Chart..."
-	@cp $(DIST_DIR)/*tgz $(HELM_REPO)/
+	@cp $(DIST_PATH)/*tgz $(HELM_REPO)/
 	@helm repo index --merge $(HELM_REPO)/index.yaml --url https://$(PROJECT)/ $(HELM_REPO)
 	@echo "== Deploying Finished"
 
 # Cleanup leftovers and distribution dir
 clean:
 	@echo "== Cleaning..."
-	@rm -rf $(DIST_DIR)
+	@rm -rf $(DIST_PATH)
 	@rm -rf $(HELM_REPO)
 	@echo "== Cleaning Finished"
 
 ################################## Technical targets
 
-$(DIST_DIR):
-	@mkdir -p $(DIST_DIR)
+$(DIST_PATH):
+	@mkdir -p $(DIST_PATH)
 
 ## This directory is git-ignored for now,
 ## and should become a worktree on the branch gh-pages in the future
@@ -95,7 +97,7 @@ helm-unittest: global-requirements
 show: ## Show env vars
 	@echo "PROJECT: $(PROJECT)"
 	@echo "CHART: $(CHART)"
-	@echo "DIST_DIR: $(DIST_DIR)"
+	@echo "DIST_PATH: $(DIST_PATH)"
 	@echo "CHART_DIR: $(CHART_DIR)"
 	@echo "HELM_REPO: $(HELM_REPO)"
 	@echo "LINT_CMD: $(LINT_CMD)"
@@ -123,4 +125,5 @@ cr/index: deps ## create chart index
 
 .PHONY: cr/upload
 cr/upload: deps ## create chart upload
-	$(cr) upload --config .cr-config.yaml
+	$(cr) upload --config .cr-config.yaml -p $(RELEASE_PATH)
+	@mv $(RELEASE_PATH)/*.tgz $(DIST_PATH)
