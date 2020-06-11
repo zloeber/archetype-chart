@@ -25,18 +25,35 @@ spec:
   hosts:
   {{- if $host.hostName }}
     - {{ $host.hostName | quote }}
+  {{- else if $host.name }}
+    - "{{ $host.name }}.{{ include "archetype.clusterdns" $root }}"
   {{- else }}
     - "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
-  {{- end -}}
-  {{- if hasKey $host "additionalHosts" }}
-    {{- range $host.additionalHosts }}
+  {{- end }}
+  {{- range $host.additionalHosts }}
     - {{ . }}
-    {{- end }}
   {{- end }}
-  {{- if $host.config }}
-    {{- $host.config | toYaml | nindent 2 }}
-  {{- else }}
-    {{- include "archetype.istio.virtualservice" $root | nindent 2 }}
-  {{- end }}
+  http:
+{{- if $host.paths }}
+  {{- range $hostpath := $host.paths }}
+  - match:
+    - uri:
+        prefix: {{ $hostpath.path | default "/" }}
+    route:
+    - destination:
+      {{- if $hostpath.backend.serviceName }}        
+        host: {{ $hostpath.backend.serviceName }}
+      {{- else }}
+        host: {{ include "archetype.fullname" $root }}
+      {{- end }}
+        port:
+        {{- if $hostpath.backend.servicePort }}        
+          number: {{ $hostpath.backend.servicePort }}
+        {{- else }}
+          number: {{ include "archetype.fullname" $root }}
+        {{- end }}
+{{- else }}
+  {{- include "archetype.istio.virtualservice" $root | nindent 2 }}
+{{- end }}
 {{- end }}
 {{- end -}}

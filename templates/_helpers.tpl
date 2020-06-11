@@ -104,22 +104,19 @@ VolumeMounts template block for deployable resources
 {{- end -}}
 
 {{- define "archetype.ingress.service" -}}
-http:
-  paths:
-  - backend:
-      serviceName: {{ include "archetype.fullname" . }}
-      servicePort: {{ .Values.ports.external }}
-    path: "/"
+- path: "/"
+  backend:
+    serviceName: {{ include "archetype.fullname" . }}
+    servicePort: {{ .Values.ports.external }}
 {{- end -}}
 
 {{- define "archetype.istio.virtualservice" -}}
-http:
 - match:
   - uri:
       prefix: /
   route:
   - destination:
-      host: {{ include "archetype.fullname" . }}
+      host: {{ include "archetype.appname" . }}
       port:
         number: {{ .Values.ports.external }}
 {{- end -}}
