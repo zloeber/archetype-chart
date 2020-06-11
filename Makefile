@@ -13,6 +13,13 @@ APP_PATH := $(CURDIR)/.local/apps
 
 cr := $(BIN_PATH)/.local/bin
 
+# Import githubtoken file if exists
+SECRETS ?= $(CURDIR)/.secrets.env
+ifneq (,$(wildcard $(SECRETS)))
+include ${SECRETS}
+export $(shell sed 's/=.*//' ${SECRETS})
+endif
+
 .PHONY: help
 help: ## Help
 	@grep --no-filename -E '^[a-zA-Z_%/-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -109,3 +116,11 @@ endif
 
 .PHONY: deps
 deps: .dep/githubapps .dep/cr ## Install general dependencies
+
+.PHONY: cr/index
+cr/index: deps ## create chart index
+	$(cr) index --config .cr-config.yaml
+
+.PHONY: cr/upload
+cr/upload: deps ## create chart index
+	$(cr) upload --config .cr-config.yaml
