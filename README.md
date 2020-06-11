@@ -13,14 +13,23 @@ Some chart elements have cluster requirements:
 - To use 'SparkApplication' deployments the google spark operator CRDs will need to be installed.
 - To use some rbac elements rbacmanager CRDs will need to be installed.
 
+## Usage
+
+```bash
+helm repo add archetype https://zloeber.github.io/archetype-chart/
+```
+
 ## Building/Publishing
 
-Update the chart version then run the following
+Update the chart version in Chart.yaml, then run the following to perform a release.
 
 ```bash
 git add --all . && git commit -m 'release: new release'
 git push origin master
 make build cr/upload cr/index
+git checkout gh-pages
+git merge master
+git push origin gh-pages
 ```
 
 ## Credits

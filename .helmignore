@@ -19,3 +19,11 @@
 .project
 .idea/
 *.tmproj
+.secrets.env
+dist
+.local
+.cr-config.yaml
+Makefile
+README.md
+lint
+incubator
