@@ -24,12 +24,14 @@ spec:
   {{- end }}
   hosts:
   {{- if $host.hostName }}
-    - host: {{ $host.hostName | quote }}
+    - {{ $host.hostName | quote }}
   {{- else }}
-    - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
+    - "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
   {{- end -}}
-  {{- range $host.additionalHosts }}
+  {{- if hasKey $host "additionalHosts" }}
+    {{- range $host.additionalHosts }}
     - {{ . }}
+    {{- end }}
   {{- end }}
   {{- if $host.config }}
     {{- $host.config | toYaml | nindent 2 }}
