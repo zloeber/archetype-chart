@@ -6,7 +6,7 @@ maintainers:
   - name: Zachary Loeber
 
 # Chart version
-version: 0.0.4
+version: 0.0.5
 
 # Application/service version
 appVersion: 0.0.1
