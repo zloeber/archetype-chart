@@ -454,10 +454,10 @@ ingress:
   ## Defining annotations directly takes precedence over any automatic annotations (which will not be rendered)
   ## Define an empty annotations to have no annotations at all for ingress created (as an example)
   # annotations: {}
-  labels: {}
   # annotations:
   #   # kubernetes.io/ingress.class: nginx
   #   # kubernetes.io/tls-acme: "true"
+  labels: {}
   # gateway:
   #   name: istio-dashboard-gateway
   #   selectors:
@@ -481,7 +481,11 @@ ingress:
   #    - secretName: server-tls
   #      hosts:
   #      - domain.com
-  
+
+istio:
+  gateway:
+    enabled: false
+
 # configmaps:
 #   coredns-custom:
 #     enabled: false

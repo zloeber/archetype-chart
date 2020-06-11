@@ -1,28 +1,27 @@
 {{- $root := . -}}
-{{- $ingress := .Values.ingress -}}
-{{- if $ingress.enabled }}
-{{- if and (eq $ingress.type "istio") $ingress.gateway.enabled }}
-{{- if $ingress.gateway.config }}
+{{- $gateway := .Values.istio.gateway -}}
+{{- if $gateway.enabled }}
+{{- if $gateway.gateway.config }}
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-{{- if $ingress.gateway.config.name }}
-  name: {{ $ingress.gateway.config.name }}
+{{- if $gateway.gateway.config.name }}
+  name: {{ $gateway.gateway.config.name }}
 {{- else }}
   name: {{ include "archetype.shortname" $root }}-gateway
 {{- end }}
 spec:
   selector:
-  {{- if $ingress.gateway.config.selectors }}
-    {{- with $ingress.gateway.config.selectors }}
+  {{- if $gateway.gateway.config.selectors }}
+    {{- with $gateway.gateway.config.selectors }}
       {{ toYaml . | nindent 6 }}
     {{- end }}
   {{- else }}
-    istio: ingressgateway
+    istio: istiogateway
   {{- end }}
   servers:
-  {{- if $ingress.gateway.config.servers }}
-    {{- with $ingress.gateway.config.servers }}
+  {{- if $gateway.gateway.config.servers }}
+    {{- with $gateway.gateway.config.servers }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
   {{- else }}
@@ -34,13 +33,13 @@ spec:
         protocol: HTTP
   {{- end }}
 {{- else }}
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: {{ include "archetype.shortname" $root }}-gateway
 spec:
   selector:
-    istio: ingressgateway
+    istio: istiogateway
   servers:
   - hosts:
     - '*'
@@ -48,6 +47,5 @@ spec:
       name: http
       number: 80
       protocol: HTTP
-{{- end }}
 {{- end }}
 {{- end -}}
