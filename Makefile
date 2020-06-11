@@ -4,7 +4,7 @@ SHELL := /bin/bash
 DIST_DIR ?= $(CURDIR)/dist
 CHART_DIR ?= $(CURDIR)
 TMPDIR ?= /tmp
-HELM_REPO ?= $(CURDIR)/repo
+HELM_REPO ?= $(CURDIR)/charts
 LINT_CMD ?= ct lint --config=lint/ct.yaml --lint-conf lint/lintconf.yaml --chart-yaml-schema lint/chart_schema.yaml
 PROJECT ?= github.com/zloeber/archetype
 CHART ?= $(shell basename "$(CURDIR)")
