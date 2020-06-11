@@ -18,7 +18,7 @@ spec:
     {{- with $ingress.gateways }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-  {{- else if (and (eq $gateway.enabled "true") (hasKey $gateway "name")) }}
+  {{- else if (and $gateway.enabled (hasKey $gateway "name")) }}
     - {{ $gateway.name }}
   {{- else }}
     - {{ include "archetype.shortname" $root }}-gateway
