@@ -469,37 +469,18 @@ ingress:
   #         name: http
   #         number: 80
   #         protocol: HTTP
-  
-  hosts:
+  hosts: []
   # - name: kubeops
   #   hostName: kubeops.{{ requiredEnv "TARGET" }}.micro.svc
-  #   config:
-  #     http:
-  #       paths:
-  #       - path: "/"
-  #         backend:
-  #           serviceName: kube-resource-report
-  #           servicePort: 80
+      # paths:
+      # - path: "/"
+      #   backend:
+      #     serviceName: kube-resource-report
+      #     servicePort: 80
   #tls:
   #    - secretName: server-tls
   #      hosts:
   #      - domain.com
-
-# Istio Settings
-# ingress:
-#   enabled: true
-#   type: istio
-#   virtualservices:
-#     kiali:
-#       hosts:
-#       - kiali.my.url
-#       uri:
-#         prefix: /
-#       route:
-#       - destination:
-#           host: kiali
-#           port:
-#             number: 20001
   
 # configmaps:
 #   coredns-custom:
