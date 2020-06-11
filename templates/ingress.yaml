@@ -64,9 +64,9 @@ spec:
       - {{ . }}
       {{- end }}
       {{- if $host.secretName }}
-        secretName: {{ $host.secretName }}
+      secretName: {{ $host.secretName }}
       {{- else }}
-        secretName: {{ include "archetype.shortname" $root }}-cert
+      secretName: {{ include "archetype.shortname" $root }}-cert
       {{- end }}
   {{- end }}
   {{- end }}
