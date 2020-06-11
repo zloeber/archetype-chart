@@ -42,7 +42,7 @@ ingressClassMap:
   internal: int
   external: ext
   staging: stage
-  default: nginx
+  default: int
 
 ## A mapping of zone names to certificate issuers
 certIssuerMap:

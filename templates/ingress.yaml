@@ -18,7 +18,6 @@ metadata:
   {{- end }}
   {{- end }}
     {{- include "archetype.ingress.class" $root | nindent 4 }}
-    {{- include "archetype.ingress.certissuer" (list $certIssuerMap $zone) | nindent 4 }}
   {{- if eq .Values.zone "internal" }}
     service.beta.kubernetes.io/{{ .Values.cloud | default "local" }}-load-balancer-internal: "true"
   {{- end }}
