@@ -13,6 +13,15 @@ Some chart elements have cluster requirements:
 - To use 'SparkApplication' deployments the google spark operator CRDs will need to be installed.
 - To use some rbac elements rbacmanager CRDs will need to be installed.
 
+## Building/Publishing
+
+Update the chart version then run the following
+
+```bash
+git add --all . && git commit -m 'release: new release'
+git push origin master
+make build cr/upload cr/index
+```
 
 ## Credits
 
