@@ -3,3 +3,5 @@ git-repo: archetype-chart
 package-path: dist
 git-base-url: https://api.github.com/
 git-upload-url: https://uploads.github.com/
+charts-repo: https://github.com/zloeber/archetype-chart
+index-path: index.yaml
