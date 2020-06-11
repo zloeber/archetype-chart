@@ -37,18 +37,18 @@ spec:
   - http:
       paths:
       {{- if $host.paths }}
-        {{- $host.paths | toYaml | nindent 8 }}
+      {{- $host.paths | toYaml | nindent 8 }}
       {{- else }}
         {{- include "archetype.ingress.service" $root | nindent 8 }}
       {{- end }}
     {{- if not $host.skipHostName -}}
-      {{- if $host.hostName }}
-      host: {{ $host.hostName | quote }}
-      {{- else if $host.name }}
-      host: "{{ $host.name }}.{{ include "archetype.clusterdns" $root }}"
-      {{- else }}
-      host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
-      {{- end }}
+    {{- if $host.hostName }}
+    host: {{ $host.hostName | quote }}
+    {{- else if $host.name }}
+    host: "{{ $host.name }}.{{ include "archetype.clusterdns" $root }}"
+    {{- else }}
+    host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
+    {{- end }}
     {{- end }}
   {{- if or $ingress.tlsEnabled $host.secretName }}
   tls:
