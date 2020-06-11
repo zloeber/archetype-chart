@@ -471,7 +471,8 @@ ingress:
   #         protocol: HTTP
   
   hosts:
-  # - name: kubeops.{{ requiredEnv "TARGET" }}.micro.svc
+  # - name: kubeops
+  #   hostName: kubeops.{{ requiredEnv "TARGET" }}.micro.svc
   #   config:
   #     http:
   #       paths:

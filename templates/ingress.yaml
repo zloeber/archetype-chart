@@ -1,12 +1,7 @@
 {{- $root := . -}}
-{{- $common := dict "Values" .Values.common -}}
-{{- $noCommon := omit .Values "common" -}}
-{{- $overrides := dict "Values" $noCommon -}}
-{{- $noValues := omit . "Values" -}}
-{{- with merge $noValues $overrides $common -}}
-{{- $config := .Values.ingress -}}
+{{- $ingress := .Values.ingress -}}
 
-{{- if and $config.enabled ( eq $config.type "standard" ) }}
+{{- if and $ingress.enabled ( eq $ingress.type "standard" ) }}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1beta1
 {{- else -}}
@@ -16,39 +11,36 @@ kind: Ingress
 metadata:
   name: {{ include "archetype.shortname" $root }}
   annotations:
-    {{- if hasKey $config "annotations" }}
-    {{- with $config.annotations }}
+  {{- if hasKey $ingress "annotations" }}
+  {{- with $ingress.annotations }}
     {{ toYaml . | nindent 4 }}
-    {{- end }}
-    {{- end }}
+  {{- end }}
+  {{- end }}
     {{- include "archetype.ingress.class" $root | nindent 4 }}
     {{- include "archetype.certissuer" (list .Values.certIssuerMap .Values.zone) | nindent 4 }}
-    {{- if $config.forecastle }}
+  {{- if $ingress.forecastle }}
     forecastle.stakater.com/expose: {{ .Values.ingress.forecastle | quote }}
-    {{- end }}
+  {{- end }}
     service.beta.kubernetes.io/{{ .Values.cloud | default "local" }}-load-balancer-internal: "true"
-    {{- if $config.prometheusScraped }}
+  {{- if $ingress.prometheusScraped }}
     prometheus.io/scrape: "true"
-    prometheus.io/port: {{ $config.prometheusPort | default .Values.ports.prometheus | quote }}
-    {{- end }}
-{{- if $config.enableSSLRedirect }}
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-{{- end }}
-{{- if $config.rewrite }}
-    ingress.kubernetes.io/rewrite-target: {{ $config.rewriteTarget | default "/" | quote }}
+    prometheus.io/port: {{ $ingress.prometheusPort | default .Values.ports.prometheus | quote }}
+  {{- end }}
+{{- if $ingress.rewrite }}
+    ingress.kubernetes.io/rewrite-target: {{ $ingress.rewriteTarget | default "/" | quote }}
 {{- end }}
   labels:
     ingressName: {{ include "archetype.shortname" $root }}
     dnsRoot: {{ .Values.dnsRoot }}
     {{- include "archetype.labels" $root | nindent 4 }}
-{{- with $config.labels }}
+  {{- with $ingress.labels }}
     {{ toYaml . | nindent 4 }}
-{{- end }}
+  {{- end }}
 spec:
   rules:
-{{- range $host := $config.hosts }}
-    {{- if $host.name }}
-    - host: {{ $host.name | quote }}
+  {{- range $host := $ingress.hosts }}
+    {{- if $host.hostName }}
+    - host: {{ $host.hostName | quote }}
     {{- else }}
     - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
     {{- end -}}
@@ -57,7 +49,7 @@ spec:
     {{- else }}
     {{- include "archetype.ingress.service" $root | nindent 6 }}
     {{- end }}
-{{- if or $config.tlsEnabled $host.secretName }}
+  {{- if or $ingress.tlsEnabled $host.secretName }}
   tls:
     - hosts:
     {{- if $host.name }}
@@ -73,8 +65,6 @@ spec:
     {{- else }}
       secretName: {{ include "archetype.shortname" $root }}-cert
     {{- end }}
-{{- end }}
-
-{{- end }}
-{{- end }}
+  {{- end }}
+  {{- end }}
 {{- end -}}
