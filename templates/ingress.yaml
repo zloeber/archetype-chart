@@ -41,6 +41,8 @@ spec:
   {{- range $host := $ingress.hosts }}
     {{- if $host.hostName }}
     - host: {{ $host.hostName | quote }}
+    {{- else if $host.name }}
+    - host: "{{ $host.name }}.{{ include "archetype.clusterdns" $root }}"
     {{- else }}
     - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
     {{- end -}}
