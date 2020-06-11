@@ -56,4 +56,5 @@ spec:
   {{- include "archetype.istio.virtualservice" $root | nindent 2 }}
 {{- end }}
 {{- end }}
+{{- end }}
 {{- end -}}
