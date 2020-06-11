@@ -1,9 +1,9 @@
 ## Top level default settings
-app: appname
+app: app
 cloud: local # Can be used to implement cloud specific internal loadbalancers (for example)
 zone: internal # Used by various lookups
 dnsRoot: micro.svc # root level dns zone for this cluster
-ingressClass: nginx
+ingressClass: internal
 replicaCount: 1 # default deployment replica count
 enablePrometheusScrape: false
 enableSSLRedirect: false

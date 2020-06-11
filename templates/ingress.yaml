@@ -1,6 +1,7 @@
 {{- $root := . -}}
 {{- $ingress := .Values.ingress -}}
-
+{{- $certIssuerMap := .Values.certIssuerMap -}}
+{{- $zone := .Values.zone -}}
 {{- if and $ingress.enabled ( eq $ingress.type "standard" ) }}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1beta1
@@ -17,11 +18,10 @@ metadata:
   {{- end }}
   {{- end }}
     {{- include "archetype.ingress.class" $root | nindent 4 }}
-    {{- include "archetype.certissuer" (list .Values.certIssuerMap .Values.zone) | nindent 4 }}
-  {{- if $ingress.forecastle }}
-    forecastle.stakater.com/expose: {{ .Values.ingress.forecastle | quote }}
-  {{- end }}
+    {{- include "archetype.ingress.certissuer" (list $certIssuerMap $zone) | nindent 4 }}
+  {{- if eq .Values.zone "internal" }}
     service.beta.kubernetes.io/{{ .Values.cloud | default "local" }}-load-balancer-internal: "true"
+  {{- end }}
   {{- if $ingress.prometheusScraped }}
     prometheus.io/scrape: "true"
     prometheus.io/port: {{ $ingress.prometheusPort | default .Values.ports.prometheus | quote }}

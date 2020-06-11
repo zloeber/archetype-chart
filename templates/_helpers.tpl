@@ -192,9 +192,9 @@ archetype.ingressclassmap returns a short name for the zone.
 {{- end -}}
 
 {{- /*
-common.ingress.certissuer prints a derived ingress certmanager annotation based on zone
+archetype.ingress.certissuer prints a derived ingress certmanager annotation based on zone
 */ -}}
-{{- define "archetype.certissuer" -}}
+{{- define "archetype.ingress.certissuer" -}}
 {{- $issuerMap := index . 0 -}}
 {{- $zone := index . 1 -}}
 {{- if hasKey $issuerMap $zone }}
