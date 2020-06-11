@@ -3,7 +3,7 @@
 {{- if $ingress.enabled }}
 {{- if and (eq $ingress.type "istio") $ingress.gateway.enabled }}
 {{- if $ingress.gateway.config }}
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
 {{- if $ingress.gateway.config.name }}
