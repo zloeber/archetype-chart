@@ -1,4 +1,4 @@
-# Archetype
+# Archetype Chart
 
 A declarative helm chart for deploying common types of services on Kubernetes
 
@@ -21,17 +21,16 @@ helm repo add archetype https://zloeber.github.io/archetype-chart/
 
 ## Building/Publishing
 
-Update the chart version in Chart.yaml, then run the following to perform a release.
+Update the chart version in Chart.yaml, then run the following to perform a release for that version.
 
 ```bash
-git add --all . && git commit -m 'release: new release'
-git push origin master
 make build cr/upload cr/index
 git add --all . && git commit -m 'release: new release'
 git push origin master
 git checkout gh-pages
 git merge master
 git push origin gh-pages
+git checkout master
 ```
 
 ## Credits
