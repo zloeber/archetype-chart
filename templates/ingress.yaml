@@ -44,7 +44,7 @@ spec:
       http:
         paths:
       {{- if $host.paths }}
-        {{ $host.paths  | toYaml | nindent 8 }}
+        {{- $host.paths  | toYaml | nindent 8 }}
       {{- else }}
         {{- include "archetype.ingress.service" $root | nindent 8 }}
       {{- end }}
