@@ -122,5 +122,5 @@ cr/index: deps ## create chart index
 	$(cr) index --config .cr-config.yaml
 
 .PHONY: cr/upload
-cr/upload: deps ## create chart index
+cr/upload: deps ## create chart upload
 	$(cr) upload --config .cr-config.yaml
