@@ -8,6 +8,10 @@ HELM_REPO ?= $(CURDIR)/repo
 LINT_CMD ?= ct lint --config=lint/ct.yaml --lint-conf lint/lintconf.yaml --chart-yaml-schema lint/chart_schema.yaml
 PROJECT ?= github.com/zloeber/archetype
 CHART ?= $(shell basename "$(CURDIR)")
+BIN_PATH := $(CURDIR)/.local/bin
+APP_PATH := $(CURDIR)/.local/apps
+
+cr := $(BIN_PATH)/.local/bin
 
 .PHONY: help
 help: ## Help
@@ -88,3 +92,20 @@ show: ## Show env vars
 	@echo "CHART_DIR: $(CHART_DIR)"
 	@echo "HELM_REPO: $(HELM_REPO)"
 	@echo "LINT_CMD: $(LINT_CMD)"
+
+.PHONY: .dep/githubapps
+.dep/githubapps: ## Install githubapp (ghr-installer)
+ifeq (,$(wildcard $(APP_PATH)/githubapp))
+	@rm -rf $(APP_PATH)
+	@mkdir -p $(APP_PATH)
+	@git clone https://github.com/zloeber/ghr-installer $(APP_PATH)/githubapp
+endif
+
+.PHONY: .dep/cr
+.dep/cr: ## Install cr
+ifeq (,$(wildcard $(cr)))
+	@$(MAKE) --no-print-directory -C $(APP_PATH)/githubapp auto helm/chart-releaser INSTALL_PATH=$(BIN_PATH) PACKAGE_EXE=cr
+endif
+
+.PHONY: deps
+deps: .dep/githubapps .dep/cr ## Install general dependencies

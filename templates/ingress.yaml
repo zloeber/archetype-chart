@@ -52,20 +52,20 @@ spec:
   tls:
     - hosts:
     {{- if $host.hostName }}
-    - host: {{ $host.hostName | quote }}
+      - host: {{ $host.hostName | quote }}
     {{- else if $host.name }}
-    - host: "{{ $host.name }}.{{ include "archetype.clusterdns" $root }}"
+      - host: "{{ $host.name }}.{{ include "archetype.clusterdns" $root }}"
     {{- else }}
-    - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
+      - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
     {{- end -}}
     {{- range $host.additionalhosts }}
       - {{ . }}
     {{- end }}
-    {{- if $host.secretName }}
-      secretName: {{ $host.secretName }}
-    {{- else }}
-      secretName: {{ include "archetype.shortname" $root }}-cert
-    {{- end }}
+      {{- if $host.secretName }}
+        secretName: {{ $host.secretName }}
+      {{- else }}
+        secretName: {{ include "archetype.shortname" $root }}-cert
+      {{- end }}
   {{- end }}
   {{- end }}
 {{- end -}}
