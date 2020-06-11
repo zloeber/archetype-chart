@@ -40,7 +40,7 @@ spec:
     - host: "{{ $host.name }}.{{ include "archetype.clusterdns" $root }}"
     {{- else }}
     - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
-    {{- end -}}
+    {{- end }}
       http:
         paths:
       {{- if $host.paths }}
