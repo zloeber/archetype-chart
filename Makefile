@@ -11,7 +11,7 @@ CHART ?= $(shell basename "$(CURDIR)")
 BIN_PATH := $(CURDIR)/.local/bin
 APP_PATH := $(CURDIR)/.local/apps
 
-cr := $(BIN_PATH)/.local/bin
+cr := $(BIN_PATH)/cr
 
 # Import githubtoken file if exists
 SECRETS ?= $(CURDIR)/.secrets.env

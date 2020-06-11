@@ -1,0 +1,5 @@
+owner: zloeber
+git-repo: archtype-chart
+package-path: dist
+git-base-url: https://api.github.com/
+git-upload-url: https://uploads.github.com/
