@@ -1,11 +1,5 @@
 {{- $root := . -}}
-{{- $common := dict "Values" .Values.common -}}
-{{- $noCommon := omit .Values "common" -}}
-{{- $overrides := dict "Values" $noCommon -}}
-{{- $noValues := omit . "Values" -}}
-
-{{- with merge $noValues $overrides $common -}}
-{{- $ports := .Values.ports.defaults -}}
+{{- $ports := .Values.ports -}}
 {{- $service := .Values.service -}}
 
 {{- if $service.enabled }}
@@ -14,7 +8,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "archetype.fullname" $root }}-{{ $name }}
+  name: {{ include "archetype.servicename" $root }}
 {{- with $service.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -29,10 +23,9 @@ spec:
   ports:
   - name: {{ $name }}
     protocol: {{ $portconfig.protocol | default "TCP" }}
-    port: {{ $portconfig.port }}
+    port: {{ $portconfig.port | default $ports.external }}
     targetPort: {{ $portconfig.targetPort | default $ports.internal }}
   selector:
     {{- include "archetype.service.selectors" $root | nindent 4 }}
-{{- end }}
 {{- end }}
 {{- end -}}

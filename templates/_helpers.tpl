@@ -106,7 +106,7 @@ VolumeMounts template block for deployable resources
 {{- define "archetype.ingress.service" -}}
 - path: "/"
   backend:
-    serviceName: {{ include "archetype.fullname" . }}
+    serviceName: {{ include "archetype.servicename" . }}
     servicePort: {{ .Values.ports.external }}
 {{- end -}}
 
@@ -131,6 +131,11 @@ VolumeMounts template block for deployable resources
 {{- define "archetype.appname" -}}
 {{- .Values.app | default (include "common.name" . ) -}}
 {{- end -}}
+
+{{- define "archetype.servicename" -}}
+{{ template "archetype.appname" . }}-svc
+{{- end -}}
+
 
 {{- define "archetype.service.selectors" -}}
 app: {{ template "archetype.appname" . | quote }}

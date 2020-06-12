@@ -35,4 +35,4 @@ git checkout master
 
 ## Credits
 
-The original (and best) (monochart)[https://github.com/cloudposse/charts/tree/master/incubator/monochart].
+(monochart)[https://github.com/cloudposse/charts/tree/master/incubator/monochart] - The original, and best, archetype chart
