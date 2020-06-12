@@ -26,6 +26,12 @@ spec:
     port: {{ $portconfig.port | default $ports.external }}
     targetPort: {{ $portconfig.targetPort | default $ports.internal }}
   selector:
+  {{- if hasKey $service "selector" }}
+    {{- with $service.selector }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- else }}
     {{- include "archetype.service.selectors" $root | nindent 4 }}
+  {{- end }}
 {{- end }}
 {{- end -}}
