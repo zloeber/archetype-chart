@@ -1,7 +1,7 @@
 {{- $root := . -}}
 {{- $gateway := .Values.istio.gateway -}}
 {{- if $gateway.enabled }}
-{{- if hasKey $gateway.config }}
+{{- if hasKey $gateway "config" }}
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
