@@ -127,3 +127,14 @@ cr/index: deps ## create chart index
 cr/upload: deps ## create chart upload
 	$(cr) upload --config .cr-config.yaml -p $(RELEASE_PATH)
 	@mv $(RELEASE_PATH)/*.tgz $(DIST_PATH)
+
+.PHONY: release
+release: build cr/upload cr/index ## Publish release of this chart
+	git checkout master || true
+	git add --all . 
+	git commit -m 'release: new release'
+	git push origin master
+	git checkout gh-pages
+	git merge master
+	git push origin gh-pages
+	git checkout master
