@@ -1,27 +1,27 @@
 {{- $root := . -}}
 {{- $gateway := .Values.istio.gateway -}}
 {{- if $gateway.enabled }}
-{{- if $gateway.gateway.config }}
+{{- if hasKey $gateway.config }}
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-{{- if $gateway.gateway.config.name }}
-  name: {{ $gateway.gateway.config.name }}
+{{- if hasKey $gateway "name" }}
+  name: {{ $gateway.name }}
 {{- else }}
   name: {{ include "archetype.shortname" $root }}-gateway
 {{- end }}
 spec:
   selector:
-  {{- if $gateway.gateway.config.selectors }}
-    {{- with $gateway.gateway.config.selectors }}
+  {{- if hasKey $gateway "selectors" }}
+    {{- with $gateway.selectors }}
       {{ toYaml . | nindent 6 }}
     {{- end }}
   {{- else }}
     istio: istiogateway
   {{- end }}
   servers:
-  {{- if $gateway.gateway.config.servers }}
-    {{- with $gateway.gateway.config.servers }}
+  {{- if $gateway.config.servers }}
+    {{- with $gateway.config.servers }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
   {{- else }}
