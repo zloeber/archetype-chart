@@ -136,7 +136,6 @@ VolumeMounts template block for deployable resources
 {{ include "archetype.appname" . }}-svc
 {{- end -}}
 
-
 {{- define "archetype.service.selectors" -}}
 app: {{ include "archetype.appname" . | quote }}
 release: {{ .Release.Name | quote }}
