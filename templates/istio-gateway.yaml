@@ -10,6 +10,7 @@ metadata:
 {{- else }}
   name: {{ include "archetype.appname" $root }}-gateway
 {{- end }}
+  {{- include "archetype.namespace.name" $root | nindent 2 }}
 spec:
   selector:
   {{- if hasKey $gateway "selectors" }}
@@ -37,6 +38,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: {{ include "archetype.appname" $root }}-gateway
+  {{- include "archetype.namespace.name" $root | nindent 2 }}
 spec:
   selector:
     istio: istiogateway

@@ -11,6 +11,7 @@ metadata:
 {{- else }}
   name: {{ include "archetype.appname" $root }}-virtualservice
 {{- end }}
+  {{- include "archetype.namespace.name" $root | nindent 2 }}
 spec:
   gateways:
   {{- if $ingress.gateways }}
