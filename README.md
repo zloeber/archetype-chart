@@ -24,13 +24,7 @@ helm repo add archetype https://zloeber.github.io/archetype-chart/
 Update the chart version in Chart.yaml, then run the following to perform a release for that version.
 
 ```bash
-make build cr/upload cr/index
-git add --all . && git commit -m 'release: new release'
-git push origin master
-git checkout gh-pages
-git merge master
-git push origin gh-pages
-git checkout master
+make release
 ```
 
 ## Credits

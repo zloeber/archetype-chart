@@ -37,7 +37,7 @@ spec:
   {{- if $host.config }}
     {{- $host.config | toYaml | nindent 2 }}
   {{- else }}
-    {{- include "archetype.istio.virtualservice" $root | nindent 2 }}
+    {{- include "archetype.istio.virtualservice" $root | nindent 4 }}
   {{- end }}
 {{- end }}
 {{- end -}}
