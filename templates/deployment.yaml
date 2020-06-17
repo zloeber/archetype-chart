@@ -11,7 +11,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "archetype.fullname" . }}
+  name: {{ include "archetype.appname" $root }}
   {{- include "archetype.namespace.name" $root | nindent 2 }}
 {{- with $deployment.annotations }}
   annotations:

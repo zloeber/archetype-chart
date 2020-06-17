@@ -3,7 +3,7 @@
 {{- if and $ingress.enabled (eq $ingress.type "istio") }}
 {{- range $host := $ingress.hosts }}
 ---
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
 {{- if $host.name }}
