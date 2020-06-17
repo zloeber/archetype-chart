@@ -1,9 +1,10 @@
+{{- $root := . -}}
 {{- if .Values.persistence -}}
 {{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ include "archetype.fullname" . }}
+  name: {{ include "archetype.fullname" $root }}
   {{- include "archetype.namespace.name" $root | nindent 2 }}
 {{- with .Values.persistence.annotations }}
   annotations:
