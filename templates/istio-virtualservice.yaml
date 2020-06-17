@@ -1,5 +1,7 @@
 {{- $root := . -}}
 {{- $ingress := .Values.ingress -}}
+{{- $gateway := .Values.istio.gateway -}}
+
 {{- if and $ingress.enabled (eq $ingress.type "istio") }}
 {{- range $host := $ingress.hosts }}
 ---
@@ -18,8 +20,8 @@ spec:
     {{- with $ingress.gateways }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-  {{- else if $ingress.gateway.name }}
-    - {{ $ingress.gateway.name }}
+  {{- else if hasKey $gateway "name" }}
+    - {{ $gateway.name }}
   {{- else }}
     - {{ include "archetype.appname" $root }}-gateway
   {{- end }}

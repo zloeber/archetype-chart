@@ -129,7 +129,7 @@ cr/upload: deps ## create chart upload
 	@mv $(RELEASE_PATH)/*.tgz $(DIST_PATH)
 
 .PHONY: release
-release: build cr/upload cr/index ## Publish release of this chart
+release: deps build cr/upload cr/index ## Publish release of this chart
 	git checkout master || true
 	git add --all . 
 	git commit -m 'release: new release'
