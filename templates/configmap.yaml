@@ -15,6 +15,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "archetype.configmap.name" $root }}
+  {{- include "archetype.namespace.name" $root | nindent 2 }}
   {{- with $configmap.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

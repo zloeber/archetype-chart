@@ -4,6 +4,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "archetype.fullname" . }}
+  {{- include "archetype.namespace.name" $root | nindent 2 }}
 {{- with .Values.persistence.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}

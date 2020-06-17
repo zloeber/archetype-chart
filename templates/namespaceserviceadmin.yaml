@@ -12,6 +12,7 @@ apiVersion: rbacmanager.reactiveops.io/v1beta1
 kind: RBACDefinition
 metadata:
   name: rbac-{{ $projectServiceAdmin.name | default .Release.Namespace }}-service-admin
+  {{- include "archetype.namespace.name" $root | nindent 2 }}
 rbacBindings:
 - name: rbac-{{ $projectServiceAdmin.name | default .Release.Namespace }}-service-admin
   subjects:

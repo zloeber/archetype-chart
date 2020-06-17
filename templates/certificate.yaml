@@ -11,6 +11,7 @@ apiVersion: cert-manager.io/v1alpha2
 kind: {{ $cert.kind | default "Certificate" }}
 metadata:
   name: {{ $cert.name }}
+  {{- include "archetype.namespace.name" $root | nindent 2 }}
 spec:
 {{- if $cert.selfSigned }}
   issuerRef:

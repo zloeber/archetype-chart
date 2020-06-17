@@ -6,6 +6,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ $name | replace "_" "-"  }}
+  {{- include "archetype.namespace.name" $root | nindent 2 }}
   {{- with $job.annotations }}
   annotations:
     {{ toYaml . | nindent 4 }}

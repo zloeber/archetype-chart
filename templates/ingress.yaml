@@ -11,6 +11,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ include "archetype.shortname" $root }}
+  {{- include "archetype.namespace.name" $root | nindent 2 }}
   annotations:
     {{- include "archetype.ingress.class" $root | nindent 4 }}
     {{- include "archetype.ingress.certissuer" (list $certIssuerMap $zone) | nindent 4 }}

@@ -8,7 +8,7 @@ metadata:
 {{- if hasKey $gateway "name" }}
   name: {{ $gateway.name }}
 {{- else }}
-  name: {{ include "archetype.shortname" $root }}-gateway
+  name: {{ include "archetype.appname" $root }}-gateway
 {{- end }}
 spec:
   selector:
@@ -36,7 +36,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: {{ include "archetype.shortname" $root }}-gateway
+  name: {{ include "archetype.appname" $root }}-gateway
 spec:
   selector:
     istio: istiogateway

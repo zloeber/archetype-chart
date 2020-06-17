@@ -9,6 +9,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "archetype.servicename" $root }}
+  {{- include "archetype.namespace.name" $root | nindent 2 }}
 {{- with $service.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

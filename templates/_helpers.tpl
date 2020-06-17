@@ -58,6 +58,17 @@ envFrom:
 {{- end }}
 
 {{/*
+Namespace template block
+*/}}
+{{- define "archetype.namespace.name" -}}
+{{- $root := . -}}
+{{- $ns := $root.Values.namespace -}}
+{{- if $ns.enabled }}
+namespace: {{ if hasKey $ns "name" }}{{ $ns.name }}{{ else }}{{ include "archetype.appname" $root }}{{ end }}
+{{- end }}
+{{- end }}
+
+{{/*
 Volumes template block for deployable resources
 */}}
 {{- define "archetype.files.volumes" -}}

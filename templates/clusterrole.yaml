@@ -13,6 +13,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
   name: {{ $config.name }}
+  {{- include "archetype.namespace.name" $root | nindent 2 }}
 rules:
 {{- if $config.rules }}
 {{- with $config.rules }}

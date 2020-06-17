@@ -1,16 +1,16 @@
 {{- $root := . -}}
-{{- $config := .Values.namespace -}}
-{{- if $config.enabled }}
+{{- $namespace := .Values.namespace -}}
+{{- if $namespace.enabled }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ if $config.name }}{{ $config.name }}{{ else }}{{ include "archetype.fullname" $root }}{{ end }}
+  name: {{ if $namespace.name }}{{ $namespace.name }}{{ else }}{{ include "archetype.appname" $root }}{{ end }}
   labels:
     {{- include "archetype.labels" $root | nindent 4 }}
-{{- with $config.labels }}
+{{- with $namespace.labels }}
     {{ toYaml . | nindent 4 }}
 {{- end }}
-{{- with $config.annotations }}
+{{- with $namespace.annotations }}
   annotations:
     {{ toYaml . | nindent 4 }}
 {{- end }}

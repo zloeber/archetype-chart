@@ -1,56 +1,40 @@
 {{- $root := . -}}
-{{- $common := dict "Values" .Values.common -}}
-{{- $noCommon := omit .Values "common" -}}
-{{- $overrides := dict "Values" $noCommon -}}
-{{- $noValues := omit . "Values" -}}
-{{- with merge $noValues $overrides $common -}}
-{{- $config := .Values.ingress -}}
-
-{{- if and $config.enabled (eq $config.type "istio") }}
-{{- if not ($config.gateway) }}
-apiVersion: networking.istio.io/v1beta1
-kind: Gateway
-metadata:
-  name: {{ include "archetype.shortname" $root }}-gateway
-spec:
-  selector:
-    istio: ingressgateway
-  servers:
-  - hosts:
-    - '*'
-    port:
-      name: http
-      number: 80
-      protocol: HTTP
-{{- end }}
-
+{{- $ingress := .Values.ingress -}}
+{{- if and $ingress.enabled (eq $ingress.type "istio") }}
+{{- range $host := $ingress.hosts }}
+---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: {{ include "archetype.shortname" $root }}-virtualservice
+{{- if $host.name }}
+  name: {{ $host.name }}
+{{- else }}
+  name: {{ include "archetype.appname" $root }}-virtualservice
+{{- end }}
 spec:
   gateways:
-{{- if not ($config.istio.gateway) }}
-  - {{ include "archetype.shortname" $root }}-gateway
-{{- else }}
-{{- with $config.istio.gateway }}
-    {{ toYaml . | nindent 4 }}
-{{- end }}
-{{- end }}
+  {{- if $ingress.gateways }}
+    {{- with $ingress.gateways }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- else if $ingress.gateway.name }}
+    - {{ $ingress.gateway.name }}
+  {{- else }}
+    - {{ include "archetype.appname" $root }}-gateway
+  {{- end }}
   hosts:
-{{- with $config.hosts }}
-    {{ toYaml . | nindent 4 }}
+  {{- if $host.hostName }}
+    - host: {{ $host.hostName | quote }}
+  {{- else }}
+    - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
+  {{- end -}}
+  {{- range $host.additionalHosts }}
+    - {{ . }}
+  {{- end }}
+  {{- if $host.config }}
+    {{- $host.config | toYaml | nindent 2 }}
+  {{- else }}
+    {{- include "archetype.istio.virtualservice" $root | nindent 2 }}
+  {{- end }}
 {{- end }}
-  http:
-  - name: name: {{ include "archetype.shortname" $root }}-routes
-    match:
-    - uri:
-        prefix: /
-    route:
-    - destination:
-        host: kiali
-        port:
-          number: 20001
-{{- end }}
-
 {{- end -}}
