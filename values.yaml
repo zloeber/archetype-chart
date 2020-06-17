@@ -194,8 +194,9 @@ env: {}
 service:
   enabled: false
   type: ClusterIP
-  # ports:
-  #   www:
+  ports:
+    www:
+      protocol: TCP
   #     port: 80
   #     targetPort: 8080
   #     protocol: TCP
