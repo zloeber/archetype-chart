@@ -34,8 +34,9 @@ spec:
   {{- range $host.additionalHosts }}
     - {{ . }}
   {{- end }}
+    http:
   {{- if $host.config }}
-    {{- $host.config | toYaml | nindent 2 }}
+    {{- $host.config | toYaml | nindent 4 }}
   {{- else }}
     {{- include "archetype.istio.virtualservice" $root | nindent 4 }}
   {{- end }}
