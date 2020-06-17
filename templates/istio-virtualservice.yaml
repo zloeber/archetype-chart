@@ -30,7 +30,7 @@ spec:
     - host: {{ $host.hostName | quote }}
   {{- else }}
     - host: "{{ include "archetype.appname" $root }}.{{ include "archetype.clusterdns" $root }}"
-  {{- end -}}
+  {{- end }}
   {{- range $host.additionalHosts }}
     - {{ . }}
   {{- end }}
