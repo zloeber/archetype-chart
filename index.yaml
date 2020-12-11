@@ -3,7 +3,19 @@ entries:
   archetype:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2020-06-16T22:15:24.213136837-05:00"
+    created: "2020-12-11T15:15:00.447651926-06:00"
+    description: A declarative helm chart for deploying common types of services on
+      Kubernetes
+    digest: eb27ca6d3a9ac48d66034679834d6e3acd91f2932a324881f533ace12e71750b
+    maintainers:
+    - name: Zachary Loeber
+    name: archetype
+    urls:
+    - https://github.com/zloeber/archetype-chart/releases/download/archetype-0.0.10/archetype-0.0.10.tgz
+    version: 0.0.10
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2020-12-11T15:15:01.35695803-06:00"
     description: A declarative helm chart for deploying common types of services on
       Kubernetes
     digest: 4910a6869ea0f35c01e16b7ea6f7cdcb203ef2ed2728f4261f811e595bffdc0a
@@ -15,7 +27,7 @@ entries:
     version: 0.0.9
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2020-06-16T22:15:24.060513-05:00"
+    created: "2020-12-11T15:15:01.241075429-06:00"
     description: A declarative helm chart for deploying common types of services on
       Kubernetes
     digest: 48d7e9daf9de5e6c1543faf556f1d8af61697cde14e7937ec18098f291e9b9fc
@@ -27,7 +39,7 @@ entries:
     version: 0.0.8
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2020-06-16T22:15:23.91014846-05:00"
+    created: "2020-12-11T15:15:01.07419318-06:00"
     description: A declarative helm chart for deploying common types of services on
       Kubernetes
     digest: 4dedc5c2cfd7830049b3afd7bb83b5798f8d12d95f80c8d0ebc1ad00ff708011
@@ -39,7 +51,7 @@ entries:
     version: 0.0.7
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2020-06-16T22:15:23.756665934-05:00"
+    created: "2020-12-11T15:15:00.93176556-06:00"
     description: A declarative helm chart for deploying common types of services on
       Kubernetes
     digest: a07f46bbedebd8dcee625112d63ccd896016385b6d704ab3c82b731a17fb14e8
@@ -51,7 +63,7 @@ entries:
     version: 0.0.6
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2020-06-16T22:15:23.624801893-05:00"
+    created: "2020-12-11T15:15:00.677352659-06:00"
     description: A declarative helm chart for deploying common types of services on
       Kubernetes
     digest: 2a3d422fed0029cdbff235d2a20d8ce56f31d9aae981f0e2f7bc09f7d86e3c68
@@ -63,7 +75,7 @@ entries:
     version: 0.0.5
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2020-06-16T22:15:23.488370081-05:00"
+    created: "2020-12-11T15:15:00.573489422-06:00"
     description: A declarative helm chart for deploying common types of services on
       Kubernetes
     digest: 26219bad92919e6c0ac5bb99ad172e526fedf3134d77659e62ad2e9ca05713f5
@@ -73,4 +85,4 @@ entries:
     urls:
     - https://github.com/zloeber/archetype-chart/releases/download/archetype-0.0.3/archetype-0.0.3.tgz
     version: 0.0.3
-generated: "2020-06-16T22:15:23.105380629-05:00"
+generated: "2020-12-11T15:15:00.212491279-06:00"

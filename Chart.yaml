@@ -6,7 +6,7 @@ maintainers:
   - name: Zachary Loeber
 
 # Chart version
-version: 0.0.9
+version: 0.0.10
 
 # Application/service version
 appVersion: 0.0.1
@@ -14,4 +14,4 @@ appVersion: 0.0.1
 dependencies:
   - name: common
     version: "0.0.5"
-    repository: "https://kubernetes-charts-incubator.storage.googleapis.com"
+    repository: "https://charts.helm.sh/incubator/"

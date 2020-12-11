@@ -29,4 +29,4 @@ make release
 
 ## Credits
 
-(monochart)[https://github.com/cloudposse/charts/tree/master/incubator/monochart] - The original, and best, archetype chart
+(monochart)[https://github.com/cloudposse/charts/tree/master/incubator/monochart] - The original archetype chart

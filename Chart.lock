@@ -1,6 +1,6 @@
 dependencies:
 - name: common
-  repository: https://kubernetes-charts-incubator.storage.googleapis.com
+  repository: https://charts.helm.sh/incubator/
   version: 0.0.5
-digest: sha256:3f6b5e5bfc3d84ce9448284d8c8865908bb6f5c43b1cd782fa87ae9105d729b7
-generated: "2020-05-24T14:58:57.319508518-05:00"
+digest: sha256:6fc64c84bdde0ce560c6bf947ca5b542a85b73c04e5aae337bf0bd7bfd48c5ad
+generated: "2020-12-11T15:14:51.144947602-06:00"
