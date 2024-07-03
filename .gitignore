@@ -1,3 +1,4 @@
 .local
 .secrets.env
 cr_release
+releases

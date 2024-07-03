@@ -112,20 +112,21 @@ endif
 
 .PHONY: .dep/cr
 .dep/cr: ## Install cr
-ifeq (,$(wildcard $(cr)))
-	@$(MAKE) --no-print-directory -C $(APP_PATH)/githubapp auto helm/chart-releaser INSTALL_PATH=$(BIN_PATH) PACKAGE_EXE=cr
-endif
+	echo "Installing cr"
+# ifeq (,$(wildcard cr))
+# 	@$(MAKE) --no-print-directory -C $(APP_PATH)/githubapp auto helm/chart-releaser INSTALL_PATH=$(BIN_PATH) PACKAGE_EXE=cr
+# endif
 
 .PHONY: deps
-deps: .dep/githubapps .dep/cr ## Install general dependencies
+deps: .dep/cr ## Install general dependencies
 
 .PHONY: cr/index
 cr/index: deps ## create chart index
-	$(cr) index --config .cr-config.yaml
+	cr index --config .cr-config.yaml
 
 .PHONY: cr/upload
 cr/upload: deps ## create chart upload
-	$(cr) upload --config .cr-config.yaml -p $(RELEASE_PATH)
+	cr upload --config .cr-config.yaml -p $(RELEASE_PATH) --token $(GITHUB_TOKEN)
 	@mv $(RELEASE_PATH)/*.tgz $(DIST_PATH)
 
 .PHONY: release
