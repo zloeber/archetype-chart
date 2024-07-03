@@ -3,6 +3,23 @@ entries:
   archetype:
   - apiVersion: v2
     appVersion: 0.0.1
+    created: "2024-07-02T20:10:57.771875148-05:00"
+    dependencies:
+    - name: common
+      repository: https://charts.helm.sh/incubator/
+      version: 0.0.5
+    description: A declarative helm chart for deploying common types of services on
+      Kubernetes
+    digest: 5ed437258654ea964fa0dcdd72a9fed558eff150b41f6908eb17575c4f072745
+    maintainers:
+    - name: Zachary Loeber
+    name: archetype
+    type: application
+    urls:
+    - https://github.com/zloeber/archetype-chart/releases/download/archetype-0.1.2/archetype-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 0.0.1
     created: "2024-07-02T20:06:42.836065784-05:00"
     dependencies:
     - name: common
@@ -119,4 +136,4 @@ entries:
     urls:
     - https://github.com/zloeber/archetype-chart/releases/download/archetype-0.0.3/archetype-0.0.3.tgz
     version: 0.0.3
-generated: "2024-07-02T20:06:42.836209539-05:00"
+generated: "2024-07-02T20:10:57.772346523-05:00"
